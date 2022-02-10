@@ -1,6 +1,23 @@
 # Run a FPGA test application 
 
+> ❗It has been tested successfully on a SNO cluster version 4.9.19.
+
+The purpose of this folder is being able to verify that the ACC100 FEC has been configured properly in your OpenShift cluster. First, we need to compile the bbdev application and for that you need the proper real time kernel devel packages.
+
+Then we can just apply the following pod example [manifest](../manifests/pod-bbdev-sample.app.yaml)
+
+## Configure ACC100 in OpenShift
+
+In the [smart-edge-open/openshift-operator](https://github.com/smart-edge-open/openshift-operator/blob/main/spec/openshift-sriov-fec-operator.md) you can find all the information required to deploy the latest FEC operator. Moreover, there is a troubleshooting guide and some information that might be relevant for your task.
+
 # Compile
+
+First you need to download the proper kernel real-time devel rpm into the file folder and configure the RTK variable inside the Dockerfile. It can be found in [brew](https://brewweb.engineering.redhat.com/brew/packageinfo?packageID=3727).
+
+The value must be the output of the $(uname -r) command in a node inside your cluster.
+Notice then, that the rtk-devel rpm must be the same kernel version. It must placed inside the files/ folder.
+
+Here you have an expected output of the build process for the bbdev application:
 
 ```sh
 $ podman build . -t quay.io/alosadag/bbdev-sample-app
@@ -3825,4 +3842,62 @@ Successfully tagged quay.io/alosadag/bbdev-sample-app:latest
 a81cce09d751277806ea48ec53838c1800d4ab2cd7852be2dbb162a74726d058
 
 ```
-Kernel rt headers can be found in [brew|https://brewweb.engineering.redhat.com/brew/packageinfo?packageID=3727]
+
+## Test the application
+
+```sh
+$ oc get pods
+NAME                                            READY   STATUS    RESTARTS      AGE
+accelerator-discovery-crjv7                     1/1     Running   3             22h
+pod-bbdev-sample-app                            1/1     Running   1             50m
+sriov-device-plugin-n4rnz                       1/1     Running   0             12m
+sriov-fec-controller-manager-5486fd4f77-fdlx6   2/2     Running   7             22h
+sriov-fec-controller-manager-5486fd4f77-skfcf   2/2     Running   7             22h
+sriov-fec-daemonset-9sqwt                       1/1     Running   8 (12m ago)   22h
+```
+```
+$ oc rsh pod-bbdev-sample-app
+sh-4.2# ./test-bbdev.py --testapp-path ./dpdk-test-bbdev -e="-w ${PCIDEVICE_INTEL_COM_INTEL_FEC_ACC100}" -i -n 1 -b 1 -l 1 -c validation -v ldpc_dec_v7813.data
+Executing: ./dpdk-test-bbdev -w 0000:87:00.6 -- -n 1 -l 1 -c validation -i -v ldpc_dec_v7813.data -b 1
+EAL: Detected 104 lcore(s)
+EAL: Detected 2 NUMA nodes
+Option -w, --pci-whitelist is deprecated, use -a, --allow option instead
+EAL: Multi-process socket /var/run/dpdk/rte/mp_socket
+EAL: Selected IOVA mode 'VA'
+EAL: No available hugepages reported in hugepages-2048kB
+EAL: Probing VFIO support...
+EAL: VFIO support initialized
+EAL:   using IOMMU type 1 (Type 1)
+EAL: Probe PCI driver: intel_acc100_vf (8086:d5d) device: 0000:87:00.6 (socket 1)
+EAL: No legacy callbacks, legacy socket not created
+
+===========================================================
+Starting Test Suite : BBdev Validation Tests
+Test vector file = ldpc_dec_v7813.data
+Device 0 queue 16 setup failed
+Allocated all queues (id=16) at prio0 on dev0
+Device 0 queue 32 setup failed
+Allocated all queues (id=32) at prio1 on dev0
+Device 0 queue 48 setup failed
+Allocated all queues (id=48) at prio2 on dev0
+Device 0 queue 64 setup failed
+Allocated all queues (id=64) at prio3 on dev0
+Device 0 queue 64 setup failed
+All queues on dev 0 allocated: 64
++ ------------------------------------------------------- +
+== test: validation
+dev:0000:87:00.6, burst size: 1, num ops: 1, op type: RTE_BBDEV_OP_LDPC_DEC
+Operation latency:
+	avg: 20388 cycles, 9.70857 us
+	min: 20388 cycles, 9.70857 us
+	max: 20388 cycles, 9.70857 us
+TestCase [ 0] : validation_tc passed
+ + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ +
+ + Test Suite Summary : BBdev Validation Tests
+ + Tests Total :        1
+ + Tests Skipped :      0
+ + Tests Passed :       1
+ + Tests Failed :       0
+ + Tests Lasted :       130.169 ms
+ + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ +
+```
