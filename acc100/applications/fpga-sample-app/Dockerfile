@@ -23,7 +23,7 @@ RUN tar -xf $DPDK_FILENAME
 
 # install kernel sources to compile DPDK
 #RUN export isRT=$(uname -r | grep rt -c) && if [ $isRT = "1" ] ; then yum install -y "kernel-rt-devel-uname-r == $(uname -r)"; else yum install -y "kernel-devel-uname-r == $(uname -r)"; fi
-RUN yum localinstall files/files/kernel-rt-devel-${RTK}.rpm
+RUN yum localinstall files/kernel-rt-devel-${RTK}.rpm -y
 RUN mkdir -p /lib/modules/${RTK}
 RUN ln -s /usr/src/kernels/${RTK} /lib/modules/${RTK}/build
 
