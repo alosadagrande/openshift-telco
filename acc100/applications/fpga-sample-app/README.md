@@ -64,8 +64,10 @@ Saving to: 'dpdk-20.11.tar.xz'
 --> 870f8f57585
 [1/2] STEP 12/16: RUN tar -xf $DPDK_FILENAME 
 --> b1aaf54bc2c
-[1/2] STEP 13/16: RUN yum localinstall files/files/kernel-rt-devel-${RTK}.rpm
-Loaded plugins: fastestmirror, ovl
+[1/2] STEP 13/16: RUN yum localinstall files/kernel-rt-devel-${RTK}.rpm -y
+Installed:
+  kernel-rt-devel.x86_64 0:4.18.0-305.34.2.rt7.107.el8_4                        
+Complete!
 --> 16955b76d1d
 [1/2] STEP 14/16: RUN mkdir -p /lib/modules/${RTK}
 --> e02cd7d7c31
