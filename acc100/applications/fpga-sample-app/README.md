@@ -3,7 +3,7 @@
 # Compile
 
 ```sh
-odman build . -t quay.io/alosadag/bbdev-sample-app
+$ podman build . -t quay.io/alosadag/bbdev-sample-app
 [1/2] STEP 1/16: FROM centos:7.9.2009 AS builder
 [1/2] STEP 2/16: ENV http_proxy=$http_proxy
 --> Using cache 52cfe7e87058249f765481e3823716dd30392795b73a46b34f2d1aea33b8ef24
