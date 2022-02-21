@@ -4,81 +4,75 @@
 
 > :exclamation: testPMD is only provided as a simple example of how to build a more fully-featured application using the DPDK base image.
 
+## Build:
 
-# dpdk-testpm-trex-example
+You can build the application from the Dockerfile which is based on the work of [Sebastian Scheinkman](https://github.com/SchSeba/dpdk-testpm-trex-example)
 
-### Deployment:
+> ❗Notice that you can adjust the DPDK version built in the container image by setting the DPDK_VER variable.
+
+```
+$ podman build . -t quay.io/alosadag/testpmd:21.11.1 -f Dockerfile 
+```
+
+## Deployment:
 
 #### Create the namespace
 
 ```bash
-oc apply -f namespace.yaml
+oc create ns testpmd
 ```
 
 #### Performance profile
 
-There is an example profile under the pao-config folder, you need to update it with
-the right parameters depending on your environment. [PAO documentation](https://docs.openshift.com/container-platform/4.9/scalability_and_performance/cnf-performance-addon-operator-for-low-latency-nodes.html)
+[PAO documentation](https://docs.openshift.com/container-platform/4.9/scalability_and_performance/cnf-performance-addon-operator-for-low-latency-nodes.html). 
 
-On a system with HyperThread enabled it's important to have both cpus in the same list of
-the performance profile
+Testpmd requires from PAO hugepages, a guaranteed Pod (number of resources requests equals to limits) and memory available. 
 
-For example:
+Example:
 
-```bash
-[core@cnfdt05 ~]$ lscpu 
-Architecture:        x86_64
-CPU op-mode(s):      32-bit, 64-bit
-Byte Order:          Little Endian
-CPU(s):              104
-On-line CPU(s) list: 0-103
-Thread(s) per core:  2
-Core(s) per socket:  26
-Socket(s):           2
-NUMA node(s):        2
-Vendor ID:           GenuineIntel
-CPU family:          6
-Model:               85
-Model name:          Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz
-Stepping:            7
-CPU MHz:             999.997
-BogoMIPS:            4200.00
-Virtualization:      VT-x
-L1d cache:           32K
-L1i cache:           32K
-L2 cache:            1024K
-L3 cache:            36608K
-NUMA node0 CPU(s):   0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102
-NUMA node1 CPU(s):   1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99,101,103
-Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts pku ospke avx512_vnni md_clear flush_l1d arch_capabilities
-```
-
-CPU siblings:
-```bash
-cat /sys/devices/system/cpu/cpu0/topology/core_cpus_list
-0,52
-```
-
-Performance profile:
-
-```bash
+```yaml
 apiVersion: performance.openshift.io/v2
 kind: PerformanceProfile
 metadata:
-  name: performance
+  annotations:
+    kubeletconfig.experimental: |
+      {"topologyManagerScope": "pod",
+       "systemReserved": {"memory": "10.5Gi"}
+      }
+    ran.openshift.io/ztp-deploy-wave: "10"
+  creationTimestamp: "2022-02-18T15:03:16Z"
+  finalizers:
+  - foreground-deletion
+  generation: 1
+  name: performance-sno
+  resourceVersion: "38562"
+  uid: 0e3a50c6-c49b-4f15-8584-5fb1782d26d4
 spec:
+  additionalKernelArgs:
+  - firmware_class.path=/var/lib/firmware/
+  - idle=poll
+  - rcupdate.rcu_normal_after_boot=0
+  - nohz_full=4-51,56-103
+  - crashkernel=1024M
   cpu:
-    isolated: 21-51,73-103
-    reserved: 0-20,52-72
+    isolated: 4-51,56-103
+    reserved: 0-3,52-55
+  globallyDisableIrqLoadBalancing: false
   hugepages:
     defaultHugepagesSize: 1G
     pages:
     - count: 32
       size: 1G
-  numa:  
-    topologyPolicy: "single-numa-node"
+  machineConfigPoolSelector:
+    pools.operator.machineconfiguration.openshift.io/master: ""
+  net:
+    userLevelNetworking: true
   nodeSelector:
-    node-role.kubernetes.io/worker-cnf: ""
+    node-role.kubernetes.io/master: ""
+  numa:
+    topologyPolicy: single-numa-node
+  realTimeKernel:
+    enabled: true
 ```
 
 Also it's important to request the topologyPolicy to be `single-numa-node`
@@ -88,15 +82,57 @@ Also it's important to request the topologyPolicy to be `single-numa-node`
 For the sriov configuration it is important to understand the interface vendor
 and match the configuration, take a look on the [openshift documentation](https://docs.openshift.com/container-platform/4.9/networking/hardware_networks/using-dpdk-and-rdma.html)
 
-Examples exist under the [sriov-configs folder](./sriov-configs) for both mlx and intel nics.
+Exmaple of SriovNetwork CR:
 
-### Trex build
+```yaml
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetwork
+metadata:
+  annotations:
+    operator.sriovnetwork.openshift.io/last-network-namespace: openshift-sriov-network-operator
+  creationTimestamp: "2022-02-18T15:39:26Z"
+  finalizers:
+  - netattdef.finalizers.sriovnetwork.openshift.io
+  generation: 1
+  name: sriov-nw-du-vfio-ens2f0
+  namespace: openshift-sriov-network-operator
+  resourceVersion: "56583"
+  uid: 3648a77d-3c94-4184-8ad2-4f589f8f2fa4
+spec:
+  ipam: '{"type": "host-local","ranges": [[{"subnet": "10.0.20.0/24"}]],"dataDir":
+      "/run/my-orchestrator/container-ipam-state-1"}'
+  networkNamespace: openshift-sriov-network-operator
+  resourceName: xxv710_ens2f0
+  spoofChk: "off"
+  trust: "on"
+```
 
-To build TREX please use the following command and the push the image to a registry.
-The image is also available under `quay.io/schseba/trex:latest`
-
-```bash
-make build-trex
+Example of 
+```yaml
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  annotations:
+    ran.openshift.io/ztp-deploy-wave: "100"
+  creationTimestamp: "2022-02-18T15:39:26Z"
+  generation: 1
+  name: xxv710-ens2f0
+  namespace: openshift-sriov-network-operator
+  resourceVersion: "56584"
+  uid: 79afaf3b-dcc1-4411-895a-6aa399dbed69
+spec:
+  deviceType: vfio-pci
+  isRdma: false
+  linkType: eth
+  mtu: 1500
+  nicSelector:
+    pfNames:
+    - ens2f0
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+  numVfs: 8
+  priority: 10
+  resourceName: xxv710_ens2f0
 ```
 
 ### Testpmd
@@ -113,13 +149,12 @@ build-dpdk
 
 ### Manual
 
-It is possible to run testpmd by accessing the container after it's running but that can
-impact the performance because the exec command is not attached to one CPU and can create interrupts
+It is possible to run testpmd by accessing the container after it's running but that can impact the performance because the exec command is not attached to one CPU and can create interrupts
 
 Update the networks name depending on the sriovNetwork CR applied on the cluster before and then create the pod
 
 ```
-oc apply -f pods/testpmd.yaml
+oc apply -f manifests/deployment-testpmd.yaml.yaml
 ```
 
 When the container is running exec into it and run the testpmd application
@@ -127,23 +162,8 @@ When the container is running exec into it and run the testpmd application
 ```bash
 export CPU=$(cat /sys/fs/cgroup/cpuset/cpuset.cpus)
 echo ${CPU}
-sh-4.4# testpmd -l ${CPU} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F1} -n 3 -- -i --nb-cores=15 --rxd=4096 --txd=4096 --rxq=7 --txq=7 --forward-mode=mac --eth-peer=0,50:00:00:00:00:01 --eth-peer=1,50:00:00:00:00:02
-EAL: Detected 104 lcore(s)
-EAL: Detected 2 NUMA nodes
-EAL: Detected static linkage of DPDK
-EAL: Multi-process socket /var/run/dpdk/rte/mp_socket
-EAL: Selected IOVA mode 'VA'
-EAL: No available hugepages reported in hugepages-2048kB
-EAL: Probing VFIO support...
-EAL: VFIO support initialized
-EAL:   using IOMMU type 1 (Type 1)
-EAL: Probe PCI driver: net_i40e_vf (8086:154c) device: 0000:89:02.0 (socket 1)
-EAL: Probe PCI driver: net_i40e_vf (8086:154c) device: 0000:89:0a.6 (socket 1)
-EAL: No legacy callbacks, legacy socket not created
-Interactive-mode selected
-EAL: Error - exiting with code: 1
-  Cause: nb-cores should be > 0 and <= 3
-sh-4.4# testpmd -l ${CPU} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F1} -n 4 -- -i --nb-cores=3 --rxd=4096 --txd=4096 --rxq=7 --txq=7 --forward-mode=mac --eth-peer=0,50:00:00:00:00:01 --eth-peer=1,50:00:00:00:00:02
+testpmd -l ${CPU} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F0} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F1} -n 4 -- -i --nb-cores=15 --rxd=4096 --txd=4096 --rxq=7 --txq=7 --forward-mode=mac --eth-peer=0,50:00:00:00:00:01 --eth-peer=1,50:00:00:00:00:02
+
 EAL: Detected 104 lcore(s)
 EAL: Detected 2 NUMA nodes
 EAL: Detected static linkage of DPDK
@@ -231,44 +251,32 @@ Done
 testpmd> 
 ```
 
-*note:* Change the `PCIDEVICE_OPENSHIFT_IO_DPDK_NIC_*` depending on the sriovNetwork you it was attached to the pod
+> :exclamation: Change the `PCIDEVICE_OPENSHIFT_IO_DPDK_NIC_*` depending on the sriovNetwork you it was attached to the pod
 (it's possible to check it using `env | grep PCIDEVICE_OPENSHIFT_IO`)
 
-*note:* it's good to check that allocated CPUs are all from the same numa and siblings, also check they are on the same
+> :exclamation: it's good to check that allocated CPUs are all from the same numa and siblings, also check they are on the same
 numa as the network nics and the hugepages
 
 To check cpu list, siblings and numa
 
 ```bash
-cat /sys/fs/cgroup/cpuset/cpuset.cpus
-22,24,26,28,30,32,34,36,74,76,78,80,82,84,86,88
-cat /sys/devices/system/cpu/cpu22/topology/core_cpus_list
-22,74
-
-ls /sys/devices/system/cpu/cpu22/ -la
-total 0
-drwxr-xr-x.   9 root root    0 Nov 14 15:37 .
-drwxr-xr-x. 113 root root    0 Nov 14 15:37 ..
-drwxr-xr-x.   6 root root    0 Nov 15 13:27 cache
-drwxr-xr-x.   6 root root    0 Nov 15 13:27 cpuidle
--r--------.   1 root root 4096 Nov 15 13:27 crash_notes
--r--------.   1 root root 4096 Nov 15 13:27 crash_notes_size
-lrwxrwxrwx.   1 root root    0 Nov 15 13:27 driver -> ../../../../bus/cpu/drivers/processor
-lrwxrwxrwx.   1 root root    0 Nov 15 13:27 firmware_node -> ../../../LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/LNXCPU:0b
-drwxr-xr-x.   2 root root    0 Nov 15 13:27 hotplug
-drwxr-xr-x.   2 root root    0 Nov 15 13:27 microcode
-lrwxrwxrwx.   1 root root    0 Nov 15 13:27 node0 -> ../../node/node0
--rw-r--r--.   1 root root 4096 Nov 15 13:27 online
-drwxr-xr-x.   2 root root    0 Nov 15 13:27 power
-lrwxrwxrwx.   1 root root    0 Nov 15 13:27 subsystem -> ../../../../bus/cpu
-drwxr-xr-x.   2 root root    0 Nov 15 13:27 thermal_throttle
-drwxr-xr-x.   2 root root    0 Nov 14 15:37 topology
--rw-r--r--.   1 root root 4096 Nov 15 13:27 uevent
-```
-```bash
-node0 -> numa 0
-node1 -> numa 1
-```
+sh-4.4# lscpu -e
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE
+0   0    0      0    0:0:0:0       yes
+1   1    1      1    1:1:1:1       yes
+2   0    0      2    2:2:2:0       yes
+3   1    1      3    3:3:3:1       yes
+4   0    0      4    4:4:4:0       yes
+5   1    1      5    5:5:5:1       yes
+6   0    0      6    6:6:6:0       yes
+7   1    1      7    7:7:7:1       yes
+8   0    0      8    8:8:8:0       yes
+9   1    1      9    9:9:9:1       yes
+10  0    0      10   10:10:10:0    yes
+11  1    1      11   11:11:11:1    yes
+12  0    0      12   12:12:12:0    yes
+13  1    1      13   13:13:13:1    yes
+...
 
 To check numa for an interface
 
@@ -380,86 +388,3 @@ To stop just run `stop` and for exiting testpmd run `quit`
 ### Automatic
 
 TDB
-
-
-## Start Trex
-
-Before starting Trex you need to update the [trex yaml](pods/dpdk/trex/trex.yaml) in multiple places
-
-* numa selection `SOCKET: "1"`
-* interface environments `interfaces: ["${PCIDEVICE_OPENSHIFT_IO_DPDK_NIC_1}","${PCIDEVICE_OPENSHIFT_IO_DPDK_NIC_2}"]`
-* networks in the pod annotation definition ` "name": "dpdk-network-1",`
-
-Then you can apply the pod, after the pod is in running state you can execute into it.
-To access the trex commandline ui run `./trex-console` and then `tui` that will open the dashboard.
-
-To run a benchmark test it possible to use one if the profiles provided by trex under on if the following folders
-* /opt/trex/astf/
-* /opt/trex/stl/
-
-Another option is to use the script provided as a configmap under /opt/tests/test.py
-
-Example of a command for trex to send 12mpps bidirectional
-
-```bash
-tui>start -f /opt/tests/test.py -m 12mpps 
-```
-
-Output:
-```bash
-Global Statistitcs
-
-connection   : localhost, Port 4501                       total_tx_L2  : 13.19 Gbps                     
-version      : STL @ v2.87                                total_tx_L1  : 17.31 Gbps                     
-cpu_util.    : 27.27% @ 14 cores (14 per dual port)       total_rx     : 13.61 Gbps                     
-rx_cpu_util. : 0.0% / 0 pps                               total_pps    : 25.76 Mpps                     
-async_util.  : 0.03% / 11.5 Kbps                          drop_rate    : 0 bps                          
-total_cps.   : 0 cps                                      queue_full   : 0 pkts                         
-
-Port Statistics
-
-   port    |         0         |         1         |       total       
------------+-------------------+-------------------+------------------
-owner      |              root |              root |                   
-link       |                UP |                UP |                   
-state      |      TRANSMITTING |      TRANSMITTING |                   
-speed      |           25 Gb/s |           25 Gb/s |                   
-CPU util.  |            27.27% |            27.27% |                   
---         |                   |                   |                   
-Tx bps L2  |         6.59 Gbps |         6.59 Gbps |        13.19 Gbps 
-Tx bps L1  |         8.66 Gbps |         8.65 Gbps |        17.31 Gbps 
-Tx pps     |        12.88 Mpps |        12.88 Mpps |        25.76 Mpps 
-Line Util. |           34.62 % |           34.62 % |                   
----        |                   |                   |                   
-Rx bps     |          6.8 Gbps |         6.81 Gbps |        13.61 Gbps 
-Rx pps     |         12.5 Mpps |        12.51 Mpps |        25.01 Mpps 
-----       |                   |                   |                   
-opackets   |        1449180458 |        1449568714 |        2898749172 
-ipackets   |        1406023842 |        1408393436 |        2814417278 
-obytes     |       92747548712 |       92772397696 |      185519946408 
-ibytes     |       95609632756 |       95770764892 |      191380397648 
-tx-pkts    |        1.45 Gpkts |        1.45 Gpkts |         2.9 Gpkts 
-rx-pkts    |        1.41 Gpkts |        1.41 Gpkts |        2.81 Gpkts 
-tx-bytes   |          92.75 GB |          92.77 GB |         185.52 GB 
-rx-bytes   |          95.61 GB |          95.77 GB |         191.38 GB 
------      |                   |                   |                   
-oerrors    |                 0 |                 0 |                 0 
-ierrors    |         8,288,289 |         7,708,209 |        15,996,498 
-
-status:  /
-
-Press 'ESC' for navigation panel...
-status: [OK]
-
-tui>
-```
-
-To stop just run `stop -a`
-
-
-# Sriov kernel tests
-
-using iperf
-```bash
-
-```
