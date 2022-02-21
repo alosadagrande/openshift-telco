@@ -228,7 +228,21 @@ Successfully tagged quay.io/alosadag/bbdev-sample-app:latest
 a81cce09d751277806ea48ec53838c1800d4ab2cd7852be2dbb162a74726d058
 ```
 
-## Test the application
+# Deploy
+
+In order to deploy the application you can just apply the pod specification stored in the manifests folder.
+
+> :warning: Notice that the Pod manifests does not have any namespace value set. It will be deployed on the ns you are pointing at.
+
+```
+$ oc apply -f manifests/pod-bbdev-sample.app.yaml
+```
+
+
+# Test the application
+
+Here are detailed the manual steps to execute the bbdev application. You can just include the execution command in the Pod spec if you prefer.
+
 
 ```sh
 $ oc get pods
