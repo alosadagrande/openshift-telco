@@ -1,0 +1,305 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trex-info-for-config
+data:
+  PORT_BANDWIDTH_GB: "25"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trex-config-template
+data:
+  trex_cfg.yaml : |
+    - port_limit: 2
+      version: 2
+      interfaces: 
+        - ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS2F0}
+        - ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS2F1}
+      port_bandwidth_gb: ${PORT_BANDWIDTH_GB}
+      port_info:
+        - ip: 10.10.10.2
+          default_gw: 10.10.10.1
+        - ip: 10.10.20.2
+          default_gw: 10.10.20.1
+      platform:
+        master_thread_id: $MASTER
+        latency_thread_id: $LATENCY
+        dual_if:
+          - socket: 0 
+            threads: [${CPU}]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trex-tests
+data:
+  testpmd.py : |
+    from trex_stl_lib.api import *
+
+    from testpmd_addr import *
+
+    # Wild local MACs
+    mac_localport0='50:00:00:00:00:01'
+    mac_localport1='50:00:00:00:00:02'
+
+    class STLS1(object):
+
+        def __init__ (self):
+            self.fsize  =64; # the size of the packet
+            self.number = 0
+
+        def create_stream (self, direction = 0):
+
+            size = self.fsize - 4; # HW will add 4 bytes ethernet FCS
+            dport = 1026 + self.number
+            self.number = self.number + 1
+            if direction == 0:
+              base_pkt =  Ether(dst=mac_telco0,src=mac_localport0)/IP(src="16.0.0.1",dst=ip_telco0)/UDP(dport=15,sport=1026)
+            else:
+              base_pkt =  Ether(dst=mac_telco1,src=mac_localport1)/IP(src="16.1.0.1",dst=ip_telco1)/UDP(dport=16,sport=1026)
+            #pad = max(0, size - len(base_pkt)) * 'x'
+            pad = (60 - len(base_pkt)) * 'x'
+
+            return STLStream(
+                packet =
+                        STLPktBuilder(
+                            pkt = base_pkt / pad
+                        ),
+                 mode = STLTXCont())
+
+        def create_stats_stream (self, rate_pps = 1000, pgid = 7, direction = 0):
+
+            size = self.fsize - 4; # HW will add 4 bytes ethernet FCS
+            if direction == 0:
+              base_pkt =  Ether(dst=mac_telco0,src=mac_localport0)/IP(src="17.0.0.1",dst=ip_telco0)/UDP(dport=dport,sport=1026)
+            else:
+              base_pkt =  Ether(dst=mac_telco1,src=mac_localport1)/IP(src="17.1.0.1",dst=ip_telco1)/UDP(dport=dport,sport=1026)
+            pad = max(0, size - len(base_pkt)) * 'x'
+
+            return STLStream(
+                packet =
+                        STLPktBuilder(
+                            pkt = base_pkt / pad
+                        ),
+                 mode = STLTXCont(pps = rate_pps),
+                 flow_stats = STLFlowLatencyStats(pg_id = pgid))
+                 #flow_stats = STLFlowStats(pg_id = pgid))
+
+        def get_streams (self, direction = 0, **kwargs):
+            # create multiple streams, one stream per core...
+            s = []
+            for i in range(14):
+                 s.append(self.create_stream(direction = direction))
+            #if direction == 0:
+            #    s.append(self.create_stats_stream(rate_pps=1000, pgid=10, direction = direction))
+            #else:
+            #    s.append(self.create_stats_stream(rate_pps=1000, pgid=11, direction = direction))
+
+            return s
+
+    # dynamic load - used for trex console or simulator
+    def register():
+        return STLS1()
+
+  testpmd_addr.py: |
+    # wild second XL710 mac
+    mac_telco0 = '4E:AF:0C:1C:95:72'
+    # we don’t care of the IP in this phase
+    ip_telco0  = '10.0.0.1'
+    # wild first XL710 mac
+    mac_telco1 = '6E:C6:2B:03:30:AE'
+    ip_telco1 = '10.1.1.1'
+
+  vpp.py : |
+    from trex_stl_lib.api import *
+    
+    from vpp_addr import *
+    
+    # Wild local MACs
+    mac_localport0='50:00:00:00:00:01'
+    mac_localport1='50:00:00:00:00:02'
+    
+    class STLS1(object):
+        
+        def __init__ (self):
+            self.fsize  =64; # the size of the packet
+            self.number = 0
+        
+        def create_stream (self, direction = 0):
+            
+            size = self.fsize - 4; # HW will add 4 bytes ethernet FCS
+            dport = 1026 + self.number
+            self.number = self.number + 1
+            if direction == 0:
+                base_pkt =  Ether(dst=mac_telco0,src=mac_localport0)/IP(src="17.0.0.1",dst="18.0.0.1")/UDP(dport=dport,
+                                                                                                          sport=1026)
+            else:
+                base_pkt =  Ether(dst=mac_telco1,src=mac_localport1)/IP(src="18.0.0.2",dst="17.0.0.2")/UDP(dport=dport,
+                                                                                                          sport=1026)
+            # pad = max(0, size - len(base_pkt)) * 'x'
+            pad = (60 - len(base_pkt)) * 'x'
+            
+            return STLStream(
+                packet =
+                STLPktBuilder(
+                    pkt = base_pkt / pad
+                ),
+                mode = STLTXCont())
+        
+        
+        def get_streams (self, direction = 0, **kwargs):
+            # create multiple streams, one stream per core...
+            s = []
+            for i in range(14):
+                s.append(self.create_stream(direction = direction))
+            return s
+    
+    # dynamic load - used for trex console or simulator
+    def register():
+        return STLS1()
+    
+  vpp_addr.py: |
+    mac_telco0 = '12:F4:BF:08:66:08'
+    mac_telco1 = 'AE:EC:3A:BD:63:2A'
+
+  ovs.py: |
+    from trex_stl_lib.api import *
+    
+    from ovs_addr import *
+    
+    # Wild local MACs
+    mac_localport0='50:00:00:00:00:01'
+    mac_localport1='50:00:00:00:00:02'
+    
+    class STLS1(object):
+        
+        def __init__ (self):
+            self.fsize  =64; # the size of the packet
+            self.number = 0
+        
+        def create_stream (self, direction = 0):
+            
+            size = self.fsize - 4; # HW will add 4 bytes ethernet FCS
+            dport = 1026 + self.number
+            self.number = self.number + 1
+            if direction == 0:
+                base_pkt =  Ether(dst=mac_telco0,src=mac_localport0)/IP(src="17.0.0.1",dst="18.0.0.1")/UDP(dport=dport,
+                                                                                                           sport=1026)
+            else:
+                base_pkt =  Ether(dst=mac_telco1,src=mac_localport1)/IP(src="18.0.0.2",dst="17.0.0.2")/UDP(dport=dport,
+                                                                                                           sport=1026)
+            # pad = max(0, size - len(base_pkt)) * 'x'
+            pad = (60 - len(base_pkt)) * 'x'
+            
+            return STLStream(
+                packet =
+                STLPktBuilder(
+                    pkt = base_pkt / pad
+                ),
+                mode = STLTXCont())
+        
+        
+        def get_streams (self, direction = 0, **kwargs):
+            # create multiple streams, one stream per core...
+            s = []
+            for i in range(14):
+                s.append(self.create_stream(direction = direction))
+            return s
+    
+    # dynamic load - used for trex console or simulator
+    def register():
+        return STLS1()
+
+  ovs_addr.py: |
+    mac_telco0 = '12:F4:BF:08:66:08'
+    mac_telco1 = 'AE:EC:3A:BD:63:2A'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+      {
+       "name": "sriov-nw-du-vfio-ens2f0",
+       "mac": "50:00:00:00:00:01",
+       "namespace": "openshift-sriov-network-operator"
+      },
+      {
+       "name": "sriov-nw-du-vfio-ens2f1",
+       "mac": "50:00:00:00:00:02",
+       "namespace": "openshift-sriov-network-operator"
+      }
+    ]'
+    cpu-load-balancing.crio.io: "true"
+  labels:
+    app: trex
+  name: trex
+  namespace: testpmd
+spec:
+  serviceAccountName: deployer
+  runtimeClassName: performance-performance-sno
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: node-role.kubernetes.io/master
+                operator: Exists
+          topologyKey: kubernetes.io/hostname
+  containers:
+    - command:
+        - /bin/bash
+        - -c
+        - /opt/scripts/create-trex-config.sh && sleep 100000
+        #./t-rex-64 --no-ofed-check --no-hw-flow-stat -i -c 14
+      image: quay.io/alosadag/trex:dev
+      imagePullPolicy: Always
+      name: trex
+      envFrom:
+        - configMapRef:
+            name: trex-info-for-config
+      resources:
+        limits:
+          cpu: "16"
+          hugepages-1Gi: 8Gi
+          memory: 1Gi
+        requests:
+          cpu: "16"
+          hugepages-1Gi: 8Gi
+          memory: 1Gi
+      securityContext:
+#        privileged: true
+        capabilities:
+          add:
+            - IPC_LOCK
+            - SYS_RESOURCE
+            - NET_RAW
+            - NET_ADMIN
+        runAsUser: 0
+      volumeMounts:
+        - name: trex-config-template
+          mountPath: /opt/templates/
+        - name: trex-tests
+          mountPath: /opt/tests/
+        - mountPath: /mnt/huge
+          name: hugepages
+        - name: modules
+          mountPath: /lib/modules
+  terminationGracePeriodSeconds: 5
+  volumes:
+    - name: modules
+      hostPath:
+        path: /lib/modules
+    - configMap:
+        name: trex-info-for-config
+      name: trex-info-for-config
+    - name: trex-config-template
+      configMap:
+        name: trex-config-template
+    - name: trex-tests
+      configMap:
+        name: trex-tests
+    - emptyDir:
+        medium: HugePages
+      name: hugepages
