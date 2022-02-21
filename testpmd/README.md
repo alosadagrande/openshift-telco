@@ -162,7 +162,9 @@ When the container is running exec into it and run the testpmd application
 ```bash
 export CPU=$(cat /sys/fs/cgroup/cpuset/cpuset.cpus)
 echo ${CPU}
-testpmd -l ${CPU} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F0} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F1} -n 4 -- -i --nb-cores=15 --rxd=4096 --txd=4096 --rxq=7 --txq=7 --forward-mode=mac --eth-peer=0,50:00:00:00:00:01 --eth-peer=1,50:00:00:00:00:02
+testpmd -l ${CPU} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F0} -a ${PCIDEVICE_OPENSHIFT_IO_XXV710_ENS7F1} \
+  -n 4 -- -i --nb-cores=15 --rxd=4096 --txd=4096 --rxq=7 --txq=7 --forward-mode=mac \
+  --eth-peer=0,50:00:00:00:00:01 --eth-peer=1,50:00:00:00:00:02
 
 EAL: Detected 104 lcore(s)
 EAL: Detected 2 NUMA nodes
