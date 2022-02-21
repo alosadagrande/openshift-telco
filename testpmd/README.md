@@ -277,6 +277,7 @@ CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE
 12  0    0      12   12:12:12:0    yes
 13  1    1      13   13:13:13:1    yes
 ...
+```
 
 To check numa for an interface
 
@@ -292,7 +293,6 @@ Driver:	mlx5_core
 lspci: Unable to load libkmod resources: error -12
 NUMANode:	0
 IOMMUGroup:	160
-
 ```
 
 When testpmd is up is good to disable the promiscuous mode by running `set promisc all off`
