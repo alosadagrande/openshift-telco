@@ -1,0 +1,54 @@
+apiVersion: mirror.openshift.io/v1alpha1
+kind: ImageSetConfiguration
+storageConfig:
+  registry:
+    imageURL: fx2-1a.cloud.lab.eng.bos.redhat.com:8443/ocp4/openshift4
+    skipTLS: true
+  #local:
+  #  path: /path/to/dir
+mirror:
+  additionalImages:
+    - name: quay.io/alosadag/tc:latest
+    - name: quay.io/alosadag/troubleshoot:latest
+    - name: quay.io/alosadag/trex:v2.95
+    - name: quay.io/alosadag/testpmd:21.11.1
+  ocp:
+    channels:
+      - name: stable-4.9
+        versions:
+          - 4.9.12
+          - 4.9.19
+          - 4.9.21
+    graph: true
+  operators:
+    - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.9 # References entire catalog
+      headsOnly: false # References latest version of each operator in catalog (true is the default value and can be omitted)
+      packages:
+        - name: local-storage-operator
+          channels:
+            - name: 'stable'
+        - name: ocs-operator
+          channels:
+            - name: 'stable-4.9'
+        - name: performance-addon-operator
+          channels:
+            - name: '4.9'
+        - name: ptp-operator
+          channels:
+            - name: '4.9'
+        - name: sriov-network-operator
+          channels:
+            - name: '4.9'
+        - name: cluster-logging
+          channels:
+            - name: 'stable'
+    - catalog: registry.redhat.io/redhat/certified-operator-index:v4.9
+      headsOnly: false # References latest version of each operator in catalog (true is the default value and can be omitted)
+      packages:
+        - name: sriov-fec
+    - catalog: registry.redhat.io/redhat/community-operator-index:v4.9 
+      headsOnly: false # References latest version of each operator in catalog (true is the default value and can be omitted)
+      packages:
+        - name: hive-operator
+          channels:
+            - name: 'ocm-2.5'
