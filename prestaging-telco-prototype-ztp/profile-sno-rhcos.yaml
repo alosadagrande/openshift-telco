@@ -1,0 +1,38 @@
+snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com:
+  image: rhcos-410.84.202203231330-0-qemu.x86_64.qcow2
+  numcpus: 8
+  memory: 32768
+  disks:
+  - size: 50
+    thin: true
+  - size: 120
+    thin: true
+  nets:
+    - name: baremetal
+      nic: ens3
+      ip: 10.19.140.20
+      mask: 255.255.255.0
+      gateway: 10.19.143.254
+      dns: 10.19.143.247
+      mac: '44:44:44:44:44:01'
+  uefi_legacy: True
+  files:
+#    - path: /etc/systemd/system/assistedconfig.service
+#      origin: rhcos-factory/assistedconfig.service
+#    - path: /etc/systemd/system/run-media.mount
+#      origin: rhcos-factory/run-media.mount
+#    - path: /etc/systemd/system/container-httpd.service
+#      origin: rhcos-factory/container-httpd.service
+#    - path: /etc/systemd/system/precache-images.service
+#      origin: rhcos-factory/precache-images.service
+    - path: /home/core/curl-all.sh
+      origin: container-images/curl-all.sh
+    - path: /home/core/extract-4.10.3.sh
+      origin: container-images/extract-4.10.3.sh
+    - path: /home/core/create-gpt-partition.sh
+      origin: create-gpt-partition.sh
+#  cmds:
+#    - 'systemctl enable run-media.mount'
+#    - 'systemctl enable assistedconfig.service'
+#    - 'systemctl disable precache-images.service'
+#    - 'systemctl disable container-httpd.service'

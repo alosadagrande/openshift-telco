@@ -1,0 +1,77 @@
+registry.redhat.io/redhat/redhat-operator-index@sha256:0a90163f02ec64179606230416a1fa8cf22249688f22c7a2c761de7b5da72a87 redhat-operator-index-v4.10
+registry.redhat.io/redhat/certified-operator-index@sha256:4a54db8be0485f4de7b5d0220cccb0dfb20116b7ce306415e2223aa201949e46 certified-operator-index-v4.10
+registry.redhat.io/redhat/community-operator-index@sha256:613974b924ed8408814e55dbe54f6215438427c9e9d72769a14974590902862e community-operator-index-v4.10
+registry.redhat.io/redhat/redhat-marketplace-index@sha256:1be10e03c16b5c33d68f69ac3b7608ee7a14b09b3372415ca0e8d49b26900783 redhat-marketplace-index-v4.10
+quay.io/openshift-release-dev/ocp-release@sha256:7ffe4cd612be27e355a640e5eec5cd8f923c1400d969fd590f806cffdaabcc56 7ffe4cd612be27e355a640e5eec5cd8f923c1400d969fd590f806cffdaabcc56
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:1706eded63d2bc1ffe35674b8416885a00d7ad3a41f3e0584ddcc303842d9bc0 1706eded63d2bc1ffe35674b8416885a00d7ad3a41f3e0584ddcc303842d9bc0
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:ec276e99bc4f4f057567fb0b613f2e0fbcf18a8488ba04ff4c78986f4ff94bd5 ec276e99bc4f4f057567fb0b613f2e0fbcf18a8488ba04ff4c78986f4ff94bd5
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:4b6376a0a30fd543e43ed46f53722300e58271fe9d615329334c703cd46dbf94 4b6376a0a30fd543e43ed46f53722300e58271fe9d615329334c703cd46dbf94
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f 2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:504022f2e4997d205459e4878a551df63878e47408f298d1abd14c1bd97c01e6 504022f2e4997d205459e4878a551df63878e47408f298d1abd14c1bd97c01e6
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:bfd50abec62b4b89cc929ff0a15005b039d29655fa107cbd628d96a206c91b9c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:55e8aa4d81098ee1174434bbdbfaf884295899c5e4593366a34d6c9144a1ce60
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:83b057ea7dfc855e4a93dc92f052ab2d942ba0744bc91f92d78e753109ecf13d
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:170003dfa95ff4ea808b3a4de3d5778c7a0b3c683c6ac606571195222c03043b
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d22995a5fbec291a332fb5b391202b3c82c95e6026168c29f9488ff7995d5c3f
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:8ec836136d39baa7807780e6e443cbcc189107d530ad27988df50f8f6d10b479
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a340ea3d86560de8cf9ee2c1afe42ad24e5eefc9903a0073abe9dc54815bf710
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c41a5a65c5a0e1d7626d4d1e1976a5ff73d374ca947b482f8cdd46288a381d95
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:867ef8c9bf8946c0bc0f01138fceec52d41409be2d035a8584b7646f2eb3b3c7
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fcbe2f72fdf333bbdcbf60e1c001d666e32046f1321b383f79176d2273a78d1c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a9b9ab81b60f0f0d86e0730a63ef126400ab6236383f9d4cfd432d77154299ed
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:83786a893d20d11556b1be5fb036556b2897e5d1f928f6c6dde57a2af0636cdc
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:e0505809ab1ee5471518264733a16b9d3f256ccc239f6ecb5d1a0acbe01827db
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:98ad96d0f1dcc35047698878860c69da7f9d3c0797da60fceaa6a0fa0e311ce6
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:60619bd4e26671d18acc06b8469fc65cbb23a23b7130a5b88a9d73a8c3adec0a
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:bca7251b67e28bef37f543568b906bf27f72a01d65f5335d768ea3fa810d0a3c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c74555756486796c95fb4015876ef1527d31aa26331055d7950aa9fd82f63d70
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f99067f5216d7b8da713c7a6843853e052f8439314d526ed1c998873e30d5763
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:178accd1823f44d52dd03c08e8be0a445a47d5e3c0fb58484f38fda24c88361a
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a52bf52659062209293a78923d5f3255505469a4ff2f3e2632c846a64592a980
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6dccd26949a4523840e4610a5b28938a0f6094d5ac57617de734be40133a46fd
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:40c04ea43a0d1ed131cc406cbeb9b5192cf1b897129446f573bc1fc9e59eed86
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:7ce1b6c6a6c7f940132dcd516a5856175fa164626a037bf71c26b0561935c27b
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:9a2bb19b5aac5d32c11d4b649311d05eccc501b5e2ff447522e98e4d3f50a4bc
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f51c580925a4275362a09537aa2de0fb28e17115052694a30da6c5126ff591cd
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:73a00e95d08cce0cf5e34602d160f4de72da69ffdd05a347fa705ee6e13cae7c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:1a407e98752815ec8bdf027a2fc656f724fa81ed8a0f14dab924b7081acef053
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:67cbf9d98160ea9a1ad823bdb1c616fda12e6e11a58fc49c79238a5a88c6cda1
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:24d00f66dae4953e7e50a53f2658221f0cb21cd90d7c8055290b58e167abc257
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c1ddff974157e74cf75f887ac16503ce38e16728e6960ae7ae7e80f2ce4bcf1f
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f532e7f50cadfc757a6d277ab5476a31a4f24aac0afc615da6ff9f7ce5e2b538
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3a461818ec358a21e8a9b6edbd6e106efede3b0e5f6d842b1e1cb1e9e92c50d5
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6b2caece0410e35ed49491b63fc800a541ee5e69385b2e012fc6d9603efd47c2
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fb5a1cde7e60cf4de7bf4256632bd31927a01b8ab5977b6f16c2b4df8c1c3f1e
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:e052ee37b444aac4602a89f583cca0ed2ba976ba8d3d2e48882263a2e4c8a5a0
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2efc1ee4885e441bdc034e986b5f5527395fb7445e0dfb059ebb4f4511b6e1c8
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:52899b1d96fe529814c25850e79c1606eb8433325a26c89dfee45f846fc24a44
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fa62c66f23f2af0f1fd3a32491e4fc5c97c31320dd985ebcbc62ba1e749dba82
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:25e47c484bc5e43197bb6739480817d5e656196958ba75897503a05363710ccb
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:28de1aee9f74e3cc9ac666b8761f0d9a0c5f625f1703fee17cf617c0a5cc30d3
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:be5ad7c623910ef4fb75078e51b46083d6a2aa90af6486ebe228cae3feb9344d
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c53385a901aee40c78a23cd7b7193afe46152eb9945bda56579fb83319ce589f
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:1ffc63dd7ad9da285edcd5e2a0e735496ec8ec03cd37f42774edca4003d6dfb1
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:9c24cf4b07aef7acc00bf99ad1ba98a97998a90cb355e85639d46b90b32ee44d
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6a1c576990cf58a1569be59202cb0023180b12b7001105648c6a446eda4b1746
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:cbc888fdb8f2c639e7a62927bc75a9132d5c5a965fa471b67b77e27b03139093
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:02c63a4a91d5c609b38d283761b60966609990853845e37b848f3cc1fd5de134
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6a21237e2070cb4e297bf80411729aaa3fd6afe88b5662f9af1bcaf61b26528f
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:ad307371d2b92ef76828c8e73ffd739af4dd07cede8a3cde13c72ee4644c4769
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:39db32b4d72796e80ed69757f9dbb3928fd422542f23597548053075b69dabdb
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5d7c177423eac9a7f678583add82f11eb9dd776f763315e52387fd9e57419b0a
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:372d2a367da920e45b756cbff9e9820124f66bb546afa7d085489cd161eff02d
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a3fc7a9880e5fe4dd7ad6a8f7f18eb72eaaad87b360166811c8081f97f2895cb
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f12c7f1901daef65b43c83aa2b57a826cc79213ce9b111c289bbd6881ebdb9e7
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:8c3df2e8e5911ce2409c00a15376fb69d657c6626a8aa172ffdeb7ebf7fedfea
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:87cfe1562cc78f7a1100df7f860e8e51fe01cc9e7d753e8881caccb5b16abc4e
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f1472992e770cc0194da355264653e3a7c82448cb79f4fc0f051a3277291b0a9
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2e23593c2d7cff4086d9ae5edf7429eeb98eb7797538ff2ca2a1d227ee7aedca
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:a52941a2bddc9abf32d9a3a4763252cc40c1a98a319a2c91da8c8cb74e23f153
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:942a2875546f667b9fb91e540fe39bc17747a9dee04ba5eb9f462b5ada88399b
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6a61353191015cb155bee7dffbfc1f40c705cbcdefa0f34d789e95039616947a
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f920b01e779078c70882990e364e8f082585901685bb75c13cb8f6ad5eed445f
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:1920f7e4ae3542af71612e53cbb7d1e38fb1c0656dddc82df918650640435486
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:69776e1c5ffa73e67a403e4958ea1cfc829ea3b19c405a2bf6090b611b066ca4
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:64d573d13a4e16c91e93f283d773d730cb25e522dec53f25dd359ebfc56c43e3
+registry.redhat.io/rhai-tech-preview/assisted-installer-reporter-rhel8@sha256:39467e1b7f9ec02817cd1e2fc0f3eeccdf6f85efa162f142c778d6f34078e2b5

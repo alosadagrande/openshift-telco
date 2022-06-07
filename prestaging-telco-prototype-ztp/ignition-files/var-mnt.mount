@@ -1,0 +1,14 @@
+#/etc/systemd/system/media.mount
+[Unit]
+Description=Mount precached container
+Before=precache-images.service
+StopWhenUnneeded=true
+
+[Mount]
+What=/dev/disk/by-partlabel/data
+Where=/var/mnt
+Type=xfs
+TimeoutSec=30
+
+[Install]
+WantedBy=multi-user.target
