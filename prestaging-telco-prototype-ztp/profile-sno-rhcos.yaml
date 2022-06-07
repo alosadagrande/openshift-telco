@@ -27,8 +27,8 @@ snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com:
 #      origin: rhcos-factory/precache-images.service
     - path: /home/core/curl-all.sh
       origin: container-images/curl-all.sh
-    - path: /home/core/extract-4.10.3.sh
-      origin: container-images/extract-4.10.3.sh
+#    - path: /home/core/extract-4.10.3.sh
+#      origin: container-images/extract-4.10.3.sh
     - path: /home/core/create-gpt-partition.sh
       origin: create-gpt-partition.sh
 #  cmds:
