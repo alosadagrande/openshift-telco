@@ -2,7 +2,6 @@ quay.io/openshift-release-dev/ocp-release:4.10.3-x86_64 ocp-release-4.10.3-x86_6
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:4b6376a0a30fd543e43ed46f53722300e58271fe9d615329334c703cd46dbf94 4b6376a0a30fd543e43ed46f53722300e58271fe9d615329334c703cd46dbf94
 registry.redhat.io/rhai-tech-preview/assisted-installer-rhel8:v1.0.0-125 assisted-installer-rhel8-v1.0.0-125
 registry.redhat.io/rhai-tech-preview/assisted-installer-agent-rhel8:v1.0.0-89 assisted-installer-agent-rhel8-v1.0.0-89
-quay.io/alosadag/httpd:2.4 httpd-2.4
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:4b6376a0a30fd543e43ed46f53722300e58271fe9d615329334c703cd46dbf94 4b6376a0a30fd543e43ed46f53722300e58271fe9d615329334c703cd46dbf94
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f 2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f 
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48 fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48
@@ -17,3 +16,4 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:479990cde02408983f5255ab11
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:73a00e95d08cce0cf5e34602d160f4de72da69ffdd05a347fa705ee6e13cae7c 73a00e95d08cce0cf5e34602d160f4de72da69ffdd05a347fa705ee6e13cae7c
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:52899b1d96fe529814c25850e79c1606eb8433325a26c89dfee45f846fc24a44 52899b1d96fe529814c25850e79c1606eb8433325a26c89dfee45f846fc24a44
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:cbc888fdb8f2c639e7a62927bc75a9132d5c5a965fa471b67b77e27b03139093 cbc888fdb8f2c639e7a62927bc75a9132d5c5a965fa471b67b77e27b03139093
+quay.io/alosadag/troubleshoot troubleshoot
