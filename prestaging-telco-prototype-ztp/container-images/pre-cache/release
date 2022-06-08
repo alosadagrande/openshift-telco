@@ -6,8 +6,9 @@
 ocp_release_version=$1
 
 extract_pull_spec(){
+    rm -f $pull_spec_file
     local rel_img_mount=$1
-    cat ${rel_img_mount}/release-manifests/image-references |jq '.spec.tags[].from.name' >> $pull_spec_file
+    cat ${rel_img_mount}/release-manifests/image-references |jq '.spec.tags[].from.name' | tr -d '"' >> $pull_spec_file
     log_debug "Release index image processing done"
 }
 
