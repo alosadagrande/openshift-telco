@@ -1,19 +1,12 @@
 #!/bin/bash
 
 #export AI_URL=https://assisted-installer.apps.cnf20.cloud.lab.eng.bos.redhat.com
-export AI_URL=http://edge-17.edge.lab.eng.rdu2.redhat.com:6008
-export AI_HOST=http://edge-17.edge.lab.eng.rdu2.redhat.com
+export AI_URL=http://edge-11.edge.lab.eng.rdu2.redhat.com:6008
+export AI_HOST=http://edge-11.edge.lab.eng.rdu2.redhat.com
 CLUSTER_NAME=virt01
 CLUSTER_NODES=1
 
-#Clean
-#rm -rf $HOME/$CLUSTER_NAME/auth
-
-#aicli create cluster -P pull_secret=/home/alosadag/pull-secret.json -P base_dns_domain=eko4.cloud.lab.eng.bos.redhat.com -P ssh_public_key='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local' ${CLUSTER_NAME} -P network_type=OVNKubernetes -P openshift_version=4.10.3 -P sno=True -P minimal=True
-
 aicli create cluster -P pull_secret=/home/alosadag/pull-secret.json -P base_dns_domain=eko4.cloud.lab.eng.bos.redhat.com -P ssh_public_key="$(cat ~/.ssh/id_rsa.pub)" ${CLUSTER_NAME} -P network_type=OVNKubernetes -P openshift_version=4.10.3 -P sno=True -P minimal=True
-
-#aicli create iso -P ssh_public_key='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local' ${CLUSTER_NAME}
 
 #Get infra-env-id
 INFRAENVID=$(aicli list infraenv | tail -2 | head -1 | awk -F "|" '{print$3}' | tr -d ' ')
