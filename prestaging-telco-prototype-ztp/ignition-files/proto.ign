@@ -11,7 +11,7 @@
     {
         "name": "precache-images.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Extracts the precached images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nWantedBy=agent.service\nBefore=agent.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/images-4.10.3\nExecStart=bash /var/mnt/images-4.10.3/extract-initial-4.10.3.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=multi-user.target default.target"
+        "contents": "[Unit]\nDescription=Extracts the precached images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nBefore=agent.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/images-4.10.3\nExecStart=bash /var/mnt/images-4.10.3/extract-initial-4.10.3.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=multi-user.target default.target\nWantedBy=agent.service"
      }
     ]
   }

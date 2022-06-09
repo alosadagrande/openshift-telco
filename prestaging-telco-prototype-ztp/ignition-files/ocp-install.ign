@@ -16,7 +16,7 @@
     {
         "name": "precache-ocp-images.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Extracts the precached OCP images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nWantedBy=kubelet.service\nBefore=kubelet.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/ocp-images-4.10.3\nExecStart=bash /var/mnt/ocp-images-4.10.3/extract-ocp-4.10.3.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=multi-user.target default.target"
+        "contents": "[Unit]\nDescription=Extracts the precached OCP images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nBefore=machine-config-daemon-pull.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/ocp-images-4.10.3\nExecStart=bash /var/mnt/ocp-images-4.10.3/extract-ocp-4.10.3.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=machine-config-daemon-pull.service"
      }
     ]
   }
