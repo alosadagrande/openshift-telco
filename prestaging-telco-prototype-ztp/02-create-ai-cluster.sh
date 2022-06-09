@@ -12,7 +12,7 @@ aicli create cluster -P pull_secret=/home/alosadag/pull-secret.json -P base_dns_
 INFRAENVID=$(aicli list infraenv | tail -2 | head -1 | awk -F "|" '{print$3}' | tr -d ' ')
 echo "This is the $INFRAENVID...."
 
-curl -X PATCH "${AI_URL}/api/assisted-install/v2/infra-envs/${INFRAENVID}" -H "accept: application/json" -H "Content-Type: application/json" -d @ignition-files/proto.patch
+curl -X PATCH "${AI_URL}/api/assisted-install/v2/infra-envs/${INFRAENVID}" -H "accept: application/json" -H "Content-Type: application/json" -d @ignition-files/discovery.patch
 
 if [ $? -eq 0 ]; then
  echo -e "\e[92m[OK] ISO is available to download. Run aicli download iso <cluster> or wget"
@@ -42,7 +42,7 @@ HOSTID=$(aicli list host | grep $CLUSTER_NAME | tail -2 | head -1 | awk -F "|" '
 echo "This is the HOST: $HOST and HOSTID: $HOSTID values"
 
 aicli update host ${HOST} -P extra_args="--save-partlabel data --copy-network" #--image-file=/var/tmp/modified-rhcos-4.10.3-x86_64-metal.x86_64.raw.gz
-curl -X PATCH "${AI_HOST}:6000/api/assisted-install/v2/infra-envs/${INFRAENVID}/hosts/${HOSTID}/ignition" -H "accept: application/json" -H "Content-Type: application/json" -d @ignition-files/ocp.patch
+curl -X PATCH "${AI_HOST}:6000/api/assisted-install/v2/infra-envs/${INFRAENVID}/hosts/${HOSTID}/ignition" -H "accept: application/json" -H "Content-Type: application/json" -d @ignition-files/pointer.patch
 echo "Validating configuration..."
 aicli info host $HOST
 #echo "Checking host-ignition-params...."
