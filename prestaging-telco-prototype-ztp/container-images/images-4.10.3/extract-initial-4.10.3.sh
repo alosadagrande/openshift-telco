@@ -5,7 +5,7 @@ OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images-4.10.3.txt}"
 
 pushd $FOLDER
 
-total_copies=$(sort -u $FOLDER/$OCP_RELEASE_LIST | sort -u | wc -l)  # Required to keep track of the pull task vs total
+total_copies=$(sort -u $FOLDER/$OCP_RELEASE_LIST | wc -l)  # Required to keep track of the pull task vs total
 current_copy=1
 
 while read -r line;
