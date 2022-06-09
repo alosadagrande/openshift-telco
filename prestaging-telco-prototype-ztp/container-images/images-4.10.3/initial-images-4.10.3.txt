@@ -1,4 +1,5 @@
 quay.io/alosadag/troubleshoot:latest
+quay.io/edge-infrastructure/assisted-installer-agent:latest
 quay.io/openshift-release-dev/ocp-release:4.10.3-x86_64 
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f 
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:40c04ea43a0d1ed131cc406cbeb9b5192cf1b897129446f573bc1fc9e59eed86
