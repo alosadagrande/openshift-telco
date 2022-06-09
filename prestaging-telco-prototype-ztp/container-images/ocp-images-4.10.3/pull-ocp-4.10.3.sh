@@ -5,6 +5,7 @@ FOLDER="${FOLDER:-$(pwd)}"
 OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-ocp-images-4.10.3.txt}"
 
 rm -f $FOLDER/*.tgz
+cp $OCP_RELEASE_LIST $FOLDER/$OCP_RELEASE_LIST
 pushd $FOLDER
 
 total_pulls=$(sort -u $FOLDER/$OCP_RELEASE_LIST | wc -l)  # Required to keep track of the pull task vs total

@@ -5,7 +5,9 @@ FOLDER="${FOLDER:-$(pwd)}"
 OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images-4.10.3.txt}"
 
 rm -f $FOLDER/*.tgz
+cp $OCP_RELEASE_LIST $FOLDER/$OCP_RELEASE_LIST
 pushd $FOLDER
+
 echo "Pulling ${uri} [${current_pull}/${total_pulls}]"if [ $? -eq 0 ]; then rm -rf ${tar}; current_pull=$((current_pull + 1)); fi
 total_pulls=$(sort -u $FOLDER/$OCP_RELEASE_LIST | wc -l)  # Required to keep track of the pull task vs total
 current_pull=1
