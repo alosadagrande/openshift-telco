@@ -17,3 +17,4 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:df3b0ec40395ea460fbf2728ca
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48
 registry.redhat.io/rhai-tech-preview/assisted-installer-agent-rhel8:v1.0.0-89
 registry.redhat.io/rhai-tech-preview/assisted-installer-rhel8:v1.0.0-125 
+quay.io/edge-infrastructure/assisted-installer:latest
