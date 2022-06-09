@@ -1,4 +1,5 @@
 quay.io/alosadag/troubleshoot:latest
+quay.io/edge-infrastructure/assisted-installer-agent:latest
 quay.io/edge-infrastructure/assisted-installer-controller:latest
 registry.redhat.io/redhat/redhat-operator-index:v4.10
 registry.redhat.io/redhat/certified-operator-index:v4.10
