@@ -1,10 +1,11 @@
+quay.io/alosadag/troubleshoot:latest
+quay.io/edge-infrastructure/assisted-installer-controller:latest
 registry.redhat.io/redhat/redhat-operator-index:v4.10
 registry.redhat.io/redhat/certified-operator-index:v4.10
 registry.redhat.io/redhat/community-operator-index:v4.10
 quay.io/edge-infrastructure/assisted-installer-controller:latest
 registry.redhat.io/redhat/redhat-marketplace-index:v4.10
 registry.redhat.io/redhat/redhat-operator-index@sha256:0a90163f02ec64179606230416a1fa8cf22249688f22c7a2c761de7b5da72a87
-quay.io/alosadag/troubleshoot:latest
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fcc68fcb4d57bbb544f18996bb9a12859db31d2dfe02573c3b11c028dbee2a92
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:f334fb8c2faa58096f386706ce8296d95e3d4eaa1e090dd097447795b49837a4
