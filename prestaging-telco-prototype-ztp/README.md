@@ -222,6 +222,22 @@ At this point we need to remove the first device of the virtual machine. Note th
 
 ## Create the ignition overrides
 
+```
+$ cd ignition-files
+$ echo "{\"ignition_config_override\":$(jq -c . discovery.ign | jq -R)}" 
+{"ignition_config_override":"{\"ignition\":{\"version\":\"3.1.0\"},\"systemd\":{\"units\":[{\"name\":\"var-mnt.mount\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Mount precached container images\\nBefore=precache-images.service\\nStopWhenUnneeded=true\\n\\n[Mount]\\nWhat=/dev/disk/by-partlabel/data\\nWhere=/var/mnt\\nType=xfs\\nTimeoutSec=30\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"precache-images.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Extracts the precached images into containers storage\\nRequires=var-mnt.mount\\nAfter=var-mnt.mount\\nBefore=agent.service\\n\\n[Service]\\nType=oneshot\\nUser=root\\nWorkingDirectory=/var/mnt/ai-images\\nExecStart=bash /var/mnt/ai-images/extract-ai.sh\\nExecStartPost=systemctl disable var-mnt.mount\\nExecStop=systemctl stop var-mnt.mount\\nTimeoutStopSec=45\\n\\n[Install]\\nWantedBy=multi-user.target default.target\\nWantedBy=agent.service\"}]}}"}
+
+$ echo "{\"ignition_config_override\":$(jq -c . discovery.ign | jq -R)}"  > discovery.patch
+```
+
+```
+$ cd ignition-files
+$ echo "{\"config\":$(jq -c . pointer.ign | jq -R)}" 
+{"config":"{\"ignition\":{\"version\":\"3.1.0\"},\"passwd\":{\"users\":[{\"groups\":[\"sudo\"],\"name\":\"core\",\"passwordHash\":\"!\",\"sshAuthorizedKeys\":[\"ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local\"]}]},\"systemd\":{\"units\":[{\"name\":\"var-mnt.mount\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Mount precached container images\\nBefore=precache-images.service\\nStopWhenUnneeded=true\\n\\n[Mount]\\nWhat=/dev/disk/by-partlabel/data\\nWhere=/var/mnt\\nType=xfs\\nTimeoutSec=30\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"precache-ocp-images.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Extracts the precached OCP images into containers storage\\nRequires=var-mnt.mount\\nAfter=var-mnt.mount\\nBefore=machine-config-daemon-pull.service\\n\\n[Service]\\nType=oneshot\\nUser=root\\nWorkingDirectory=/var/mnt/ocp-images\\nExecStart=bash /var/mnt/ocp-images/extract-ocp.sh\\nExecStartPost=systemctl disable var-mnt.mount\\nExecStop=systemctl stop var-mnt.mount\\nTimeoutStopSec=45\\n\\n[Install]\\nWantedBy=machine-config-daemon-pull.service\"}]}}"}
+
+$ echo "{\"config\":$(jq -c . pointer.ign | jq -R)}" > pointer.patch
+```
+
 
 ## Create the Assisted Service cluster install
 
