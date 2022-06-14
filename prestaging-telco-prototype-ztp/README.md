@@ -123,6 +123,100 @@ ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e0
 Next step is to create the pre-staged virtual machine where SNO is going to be installed.
 
 ```
+  ./01-create-vm.sh 
+Creating a VM running RHCOS 4.10...
+Setting 10.19.140.20 ipv4...
+UEFI enabled...
+Adding scripts to populate the partition with artifacts...
+Deploying Vms...
+snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com deployed on eko4
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ED25519 key sent by the remote host is
+SHA256:yBK484dB+AsyArjJmxscW4ODzpM7AIxAnOBiyfcCt4M.
+Please contact your system administrator.
+Add correct host key in /home/alosadag/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /home/alosadag/.ssh/known_hosts:104
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
+UpdateHostkeys is disabled because the host key is not trusted.
 
+creating the GPT partition at the end of device vdb, format vdb1 as XFS and mount on /var/mnt
++ sgdisk -n 1:120000000 /dev/vdb -g
+Creating new GPT entries.
+Information: Moved requested sector from 120000000 to 119998464 in
+order to align on 2048-sector boundaries.
+The operation has completed successfully.
++ sgdisk -c:1:data /dev/vdb
+Setting name!
+partNum is 0
+The operation has completed successfully.
++ mkfs.xfs /dev/vdb1
+meta-data=/dev/vdb1              isize=512    agcount=4, agsize=4114367 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=1, rmapbt=0
+         =                       reflink=1
+data     =                       bsize=4096   blocks=16457467, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=8035, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+Discarding blocks...Done.
++ mount /dev/vdb1 /var/mnt/
+Downloading the boostrap container images...
++ HTTP_IP=10.19.138.94
++ FOLDER=/var/mnt
++ mkdir -p /var/mnt/images-4.10.3
++ mkdir -p /var/mnt/ocp-images-4.10.3
++ curl_artifacts 10.19.138.94 /var/mnt
++ HTTPD=10.19.138.94
++ LOCATION=/var/mnt
++ mkdir -p /var/mnt
+++ grep href
+++ curl -s http://10.19.138.94
+++ sed 's/.*href="//'
+++ sed 's/".*//'
+++ grep '^[0-9a-zA-Z].*'
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3/ -o /var/mnt/images-4.10.3/
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/ocp-images-4.10.3/ -o /var/mnt/ocp-images-4.10.3/
++ curl_artifacts 10.19.138.94/images-4.10.3/ /var/mnt/images-4.10.3
++ HTTPD=10.19.138.94/images-4.10.3/
++ LOCATION=/var/mnt/images-4.10.3
++ mkdir -p /var/mnt/images-4.10.3
+++ curl -s http://10.19.138.94/images-4.10.3/
+++ grep href
+++ sed 's/.*href="//'
+++ sed 's/".*//'
+++ grep '^[0-9a-zA-Z].*'
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-agent-rhel8_v1.0.0-89.tgz -o /var/mnt/images-4.10.3/assisted-installer-agent-rhel8_v1.0.0-89.tgz
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-agent_latest.tgz -o /var/mnt/images-4.10.3/assisted-installer-agent_latest.tgz
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-rhel8_v1.0.0-125.tgz -o /var/mnt/images-4.10.3/assisted-installer-rhel8_v1.0.0-125.tgz
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//assisted-installer_latest.tgz -o /var/mnt/images-4.10.3/assisted-installer_latest.tgz
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//dups.txt -o /var/mnt/images-4.10.3/dups.txt
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//extract-initial-4.10.3.sh -o /var/mnt/images-4.10.3/extract-initial-4.10.3.sh
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//initial-images-4.10.3.txt -o /var/mnt/images-4.10.3/initial-images-4.10.3.txt
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//ocp-release_4.10.3-x86_64.tgz -o /var/mnt/images-4.10.3/ocp-release_4.10.3-x86_64.tgz
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/images-4.10.3//ocp-v4.0-art-dev@sha256_2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f.tgz -o /var/mnt/images-4.10.3/ocp-v4.0-art-dev@sha256_2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f.tgz
+....
++ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
++ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp_images.txt.4.10.3 -o /var/mnt/ocp-images-4.10.3/ocp_images.txt.4.10.3
+unmount partition and shutting down
+...
 ```
 
