@@ -3,12 +3,12 @@
 #cwd="${cwd:-$pwd}"
 . common
 
-ocp_release_version=$1
+ocp_version=$1
 
 extract_pull_spec(){
     rm -f $pull_spec_file
     local rel_img_mount=$1
-    cat ${rel_img_mount}/release-manifests/image-references |jq '.spec.tags[].from.name' | tr -d '"' >> $pull_spec_file
+    cat ${rel_img_mount}/release-manifests/image-references |jq '.spec.tags[].from.name' | tr -d '"' >> $pull_spec_file.${ocp_version}
     log_debug "Release index image processing done"
 }
 
@@ -31,6 +31,13 @@ release_main(){
 }
 
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
-  release_main $ocp_release_version
-  exit $?
+   if ! command -v oc &> /dev/null
+   then
+     echo "oc binary could not be found"
+     exit
+   else
+     ocp_release_version=$(oc adm release info $ocp_version -o json | jq .image | tr -d '"')
+     release_main $ocp_release_version
+     exit $?
+   fi
 fi
