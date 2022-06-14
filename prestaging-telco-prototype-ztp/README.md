@@ -8,16 +8,16 @@
 * **02-create-ai-cluster.sh**. This helper scripts runs a provisioning workflow interacting with the Assisted Installer APIs
 * **container-images/** . This folder contains all the precached artifacts required to provision OCP with Assisted Installer.
   * curl-all.sh. This script is used by the 01-create-vm.sh script to download all the artifacts and scripts into the partition.
-  * **images-4.10.3/**. This folder contains all the artifacts needed during the initial phase of the provisioning where the AI agent is registered against the Assisted Service.
-    * extract-initial-4.10.3.sh. This script is in charge of extracting the artifacts into the container storage folder of the OS. It uses the list of container images listed below. This script is executed by a systemd service once the minimal ISO is booted on memory.
+  * **ai-images/**. This folder contains all the artifacts needed during the initial phase of the provisioning where the AI agent is registered against the Assisted Service.
+    * extract-ai.sh. This script is in charge of extracting the artifacts into the container storage folder of the OS. It uses the list of container images listed below. This script is executed by a systemd service once the minimal ISO is booted on memory.
     * initial-images-4.10.3.txt. This file contains a list of all the container images with its full container name needed for the Assisted Installer registration process where the minimal ISO is running.
-    * pull-initial-4.10.3.sh. This script uses the above list to pull all the container images from their official location to a local gzipped tarball.
-  * **ocp-images-4.10.3/**. This folder contains all the artifacts and scripts required to be placed in the container storage during the OpenShift installation phase.  
-    * extract-ocp-4.10.3.sh. This script is in charge of extracting the artifacts into the container storage folder of the running OS. It uses the list of container images listed below. This script is executed once the RHCOS image is persisted into disk.
-    * ocp-images-4.10.3.txt. This file contains a list of all the container images with its full container name needed for the OCP installation process. 
-    * pull-ocp-4.10.3.sh. This script uses the above list to pull all the container images from the official location to a local compressed tarball. In this case it only downloads container images listed in the OCP release info (oc adm release info).
+    * pull-ai.sh. This script uses the above list to pull all the container images from their official location to a local gzipped tarball.
+  * **ocp-images/**. This folder contains all the artifacts and scripts required to be placed in the container storage during the OpenShift installation phase.  
+    * extract-ocp.sh. This script is in charge of extracting the artifacts into the container storage folder of the running OS. It uses the list of container images listed below. This script is executed once the RHCOS image is persisted into disk.
+    * ocp_images.txt.4.10.3. This file contains a list of all the container images with its full container name needed for the OCP installation process. 
+    * pull-ocp.sh. This script uses the above list to pull all the container images from the official location to a local compressed tarball. In this case it only downloads container images listed in the OCP release info (oc adm release info).
   * **pre-cache/**. This folder contains all the tools to create the list of OCP images required to be precached. It is based on the [Cluster Group Upgrade precache feature](https://github.com/openshift-kni/cluster-group-upgrades-operator/tree/main/pre-cache).
-    * release. This is the principal script which calls the release script with a couple of variables. The output is a list of all container images ready to be pulled in a file called images.txt
+    * release. This is the principal script that creates a list of all the OCP container images that needs to be pulled. That list is saved in a file called images.txt.$ocp_version. The same list will be used by pull-ocp.sh to download them in a tar.gz format.
   * **create-gpt-partition.sh**. This script is called by the 01-create-vm.sh in order to create a GPT partition at the end of the disk.
   * **ignition-files/**. This folder contains all the specific configurations applied to Assisted Service to override the default set up for the discovery and pointer ignition.
     * discovery.ign. These are the ignition systemd units that need to be included into the discovery ignition that is part of the minimal ISO.
@@ -36,7 +36,7 @@ First pull the container images required for registering the new cluster into As
 
 ```
 # export FOLDER=/root/container-images/images-4.10.3/
-# ./pull-initial-4.10.3.sh 
+# ./pull-ai.sh 
 ~/container-images/images-4.10.3 ~/openshift-telco/prestaging-telco-prototype-ztp/container-images/images-4.10.3
 Pulling quay.io/alosadag/troubleshoot:latest [1/20]
 troubleshoot_latest/
@@ -52,6 +52,17 @@ troubleshoot_latest/f446b25e21b6fd4f08d2c08962f593f611ddf3c04b19fdb9b28a9fd8969c
 troubleshoot_latest/manifest.json
 Pulling quay.io/edge-infrastructure/assisted-installer-agent:latest [2/20]
 ....
+Pulling quay.io/edge-infrastructure/assisted-installer:latest [20/20]
+assisted-installer_latest/
+assisted-installer_latest/version
+assisted-installer_latest/89b4a75bc2d8500f15463747507c9623df43886c134463e7f0527e70900e7a7b
+assisted-installer_latest/a70843738bb77e1ab9c1f85969ebdfa55f178e746be081d1cb4f94011f69eb7c
+assisted-installer_latest/c32ab78b488d0c72f64eded765c0cf6b5bf2c75dab66cb62a9d367fa6ec42513
+assisted-installer_latest/599d07cb321ff0a3c82224e1138fc685793fa69b93ed5780415751a5f7e4b8c2
+assisted-installer_latest/18e134661c2f79cde945bfaaeb77a527750ecd024fa63aa1f65ae577c5fb88da
+assisted-installer_latest/93816e42ddd0a62c3bf8c3b86466c1a9682786072c1282dda7723634d03f3bb1
+assisted-installer_latest/manifest.json
+~/openshift-telco/prestaging-telco-prototype-ztp/container-images/ai-images
 ```
 
 Next, pull the container images required for install OpenShift.
@@ -65,14 +76,53 @@ upgrades.pre-cache 2022-06-14T14:02:28+00:00 DEBUG Release index image processin
 89009c527d1a6a249524856bbefeb0aedf26ae412943b1d5702b8a4b4c0878b8
 # ./release 4.10.3
 # ls -l
-total 68
--rwxr-xr-x. 1 root root  1227 Jun 14 13:49 common
--rw-r--r--. 1 root root 19278 Jun 14 14:02 images.txt.4.10.3
--rw-r--r--. 1 root root 19397 Jun 14 14:02 images.txt.4.10.4
--rwxr--r--. 1 root root   202 Jun 14 13:55 main.sh
+total 64
+-rwxr-xr-x. 1 root root  1231 Jun 14 14:15 common
+-rw-r--r--. 1 root root 19278 Jun 14 14:17 ocp_images.txt.4.10.3
+-rw-r--r--. 1 root root 19397 Jun 14 14:17 ocp_images.txt.4.10.4
 -rwxr-xr-x. 1 root root  2739 Jun  8 09:30 olm
 -rw-r--r--. 1 root root  3848 Jun  8 09:30 parse_index.py
 -rwxr-xr-x. 1 root root  3216 Jun  8 09:30 pull
 -rw-r--r--. 1 root root   631 Jun  8 09:30 README.md
 -rwxr-xr-x. 1 root root  1182 Jun 14 14:01 release
+```
+Now, pull all the OCP container images for the specific release:
+
+```
+# cp ocp_images.txt.4.10.3 ../ocp-images-4.10.3/.
+# cd ../ocp-images
+# export FOLDER=/root/container-images/ocp-images-4.10.3/
+[root@eko4 ocp-images]# ./pull-ocp.sh 
+~/container-images/ocp-images-4.10.3 ~/openshift-telco/prestaging-telco-prototype-ztp/container-images/ocp-images
+Pulling quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39 [1/162]
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/version
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/eac1b95df832dc9f172fd1f07e7cb50c1929b118a4249ddd02c6318a677b506a
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/47aa3ed2034c4f27622b989b26c06087de17067268a19a1b3642a7e2686cd1a3
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/01318f016ef2c64d07aebccbb8b60eabb3b68b5905b093f5ac6fce0747d94415
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/ed7bb2714da62ad5492dbd944cef2a3f92df8120ef2c877c03f1975ba01b2382
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/e267a71e8d3b93df38d65d2622685d283ecab97d8d8acef46379d2026200207c
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/9d5d4f564033a2bac3af7611734c3f9323225421eb0345455d1c11375a680326
+ocp-v4.0-art-dev@sha256_70baef8e0f932a66ca16738e0ddba5148645bbd9947b40ec4cec63630dd33c39/manifest.json
+Pulling quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fcc68fcb4d57bbb544f18996bb9a12859db31d2dfe02573c3b11c028dbee2a92 [2/162]
+...
+Pulling quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4 [162/162]
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/version
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/eac1b95df832dc9f172fd1f07e7cb50c1929b118a4249ddd02c6318a677b506a
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/47aa3ed2034c4f27622b989b26c06087de17067268a19a1b3642a7e2686cd1a3
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/01318f016ef2c64d07aebccbb8b60eabb3b68b5905b093f5ac6fce0747d94415
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/ed7bb2714da62ad5492dbd944cef2a3f92df8120ef2c877c03f1975ba01b2382
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/be3ee8645076d69a5fab4e1bdc98a01fd630229262c085e113d257a65b6e0865
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/fc847acc7a60005faee5e176df432cbc890268ad2c00ffad4663e4f454607371
+ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e06b3e03b4/manifest.json
+```
+
+## Create the pre-staged virtual machine 
+
+Next step is to create the pre-staged virtual machine where SNO is going to be installed.
+
+```
+
+```
 
