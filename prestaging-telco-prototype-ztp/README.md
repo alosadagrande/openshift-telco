@@ -17,7 +17,7 @@
     * ocp-images-4.10.3.txt. This file contains a list of all the container images with its full container name needed for the OCP installation process. 
     * pull-ocp-4.10.3.sh. This script uses the above list to pull all the container images from the official location to a local compressed tarball. In this case it only downloads container images listed in the OCP release info (oc adm release info).
   * **pre-cache/**. This folder contains all the tools to create the list of OCP images required to be precached. It is based on the [Cluster Group Upgrade precache feature](https://github.com/openshift-kni/cluster-group-upgrades-operator/tree/main/pre-cache).
-    * main.sh. This is the principal script which calls the release script with a couple of variables. The output is a list of all container images ready to be pulled in a file called images.txt
+    * release. This is the principal script which calls the release script with a couple of variables. The output is a list of all container images ready to be pulled in a file called images.txt
   * **create-gpt-partition.sh**. This script is called by the 01-create-vm.sh in order to create a GPT partition at the end of the disk.
   * **ignition-files/**. This folder contains all the specific configurations applied to Assisted Service to override the default set up for the discovery and pointer ignition.
     * discovery.ign. These are the ignition systemd units that need to be included into the discovery ignition that is part of the minimal ISO.
