@@ -123,7 +123,7 @@ ocp-v4.0-art-dev@sha256_d846a05f9ced30f3534e1152802c51c0ccdf80da1d323f9b9759c2e0
 Next step is to create the pre-staged virtual machine where SNO is going to be installed.
 
 ```
-  ./01-create-vm.sh 
+$ ./01-create-vm.sh 
 Creating a VM running RHCOS 4.10...
 Setting 10.19.140.20 ipv4...
 UEFI enabled...
@@ -132,6 +132,7 @@ Deploying Vms...
 snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com deployed on eko4
 
 creating the GPT partition at the end of device vdb, format vdb1 as XFS and mount on /var/mnt
+
 + sgdisk -n 1:120000000 /dev/vdb -g
 Creating new GPT entries.
 Information: Moved requested sector from 120000000 to 119998464 in
@@ -157,14 +158,15 @@ Discarding blocks...Done.
 Downloading the boostrap container images...
 + HTTP_IP=10.19.138.94
 + FOLDER=/var/mnt
-+ mkdir -p /var/mnt/images-4.10.3
-+ mkdir -p /var/mnt/ocp-images-4.10.3
++ OCP_RELEASE=4.10.3
++ mkdir -p /var/mnt/ai-images
++ mkdir -p /var/mnt/ocp-images
 + curl_artifacts 10.19.138.94 /var/mnt
 + HTTPD=10.19.138.94
 + LOCATION=/var/mnt
 + mkdir -p /var/mnt
-++ grep href
 ++ curl -s http://10.19.138.94
+++ grep href
 ++ sed 's/.*href="//'
 ++ sed 's/".*//'
 ++ grep '^[0-9a-zA-Z].*'
@@ -172,37 +174,55 @@ Downloading the boostrap container images...
 + curl -s http://10.19.138.94/images-4.10.3/ -o /var/mnt/images-4.10.3/
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
 + curl -s http://10.19.138.94/ocp-images-4.10.3/ -o /var/mnt/ocp-images-4.10.3/
-+ curl_artifacts 10.19.138.94/images-4.10.3/ /var/mnt/images-4.10.3
++ curl_artifacts 10.19.138.94/images-4.10.3/ /var/mnt/ai-images
 + HTTPD=10.19.138.94/images-4.10.3/
-+ LOCATION=/var/mnt/images-4.10.3
-+ mkdir -p /var/mnt/images-4.10.3
++ LOCATION=/var/mnt/ai-images
++ mkdir -p /var/mnt/ai-images
 ++ curl -s http://10.19.138.94/images-4.10.3/
 ++ grep href
 ++ sed 's/.*href="//'
 ++ sed 's/".*//'
 ++ grep '^[0-9a-zA-Z].*'
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-agent-rhel8_v1.0.0-89.tgz -o /var/mnt/images-4.10.3/assisted-installer-agent-rhel8_v1.0.0-89.tgz
++ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-agent-rhel8_v1.0.0-89.tgz -o /var/mnt/ai-images/assisted-installer-agent-rhel8_v1.0.0-89.tgz
+...
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-agent_latest.tgz -o /var/mnt/images-4.10.3/assisted-installer-agent_latest.tgz
++ curl -s http://10.19.138.94/images-4.10.3//ocp-v4.0-art-dev@sha256_fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48.tgz -o /var/mnt/ai-images/ocp-v4.0-art-dev@sha256_fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48.tgz
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//assisted-installer-rhel8_v1.0.0-125.tgz -o /var/mnt/images-4.10.3/assisted-installer-rhel8_v1.0.0-125.tgz
++ curl -s http://10.19.138.94/images-4.10.3//troubleshoot_latest.tgz -o /var/mnt/ai-images/troubleshoot_latest.tgz
++ curl_artifacts 10.19.138.94/ocp-images-4.10.3/ /var/mnt/ocp-images
++ HTTPD=10.19.138.94/ocp-images-4.10.3/
++ LOCATION=/var/mnt/ocp-images
++ mkdir -p /var/mnt/ocp-images
+++ grep href
+++ curl -s http://10.19.138.94/ocp-images-4.10.3/
+++ sed 's/.*href="//'
+++ sed 's/".*//'
+++ grep '^[0-9a-zA-Z].*'
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//assisted-installer_latest.tgz -o /var/mnt/images-4.10.3/assisted-installer_latest.tgz
++ curl -s http://10.19.138.94/ocp-images-4.10.3//extract-ocp.sh -o /var/mnt/ocp-images/extract-ocp.sh
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//dups.txt -o /var/mnt/images-4.10.3/dups.txt
++ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp-images-4.10.3.txt -o /var/mnt/ocp-images/ocp-images-4.10.3.txt
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//extract-initial-4.10.3.sh -o /var/mnt/images-4.10.3/extract-initial-4.10.3.sh
++ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp-v4.0-art-dev@sha256_f835160f1dc29995853eb1c13aa9e2badbb45c8656947b6eb6faefc876aab3ee.tgz -o /var/mnt/ocp-images/ocp-v4.0-art-dev@sha256_f835160f1dc29995853eb1c13aa9e2badbb45c8656947b6eb6faefc876aab3ee.tgz
+...
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//initial-images-4.10.3.txt -o /var/mnt/images-4.10.3/initial-images-4.10.3.txt
++ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp-v4.0-art-dev@sha256_fcc68fcb4d57bbb544f18996bb9a12859db31d2dfe02573c3b11c028dbee2a92.tgz -o /var/mnt/ocp-images/ocp-v4.0-art-dev@sha256_fcc68fcb4d57bbb544f18996bb9a12859db31d2dfe02573c3b11c028dbee2a92.tgz
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//ocp-release_4.10.3-x86_64.tgz -o /var/mnt/images-4.10.3/ocp-release_4.10.3-x86_64.tgz
++ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp-v4.0-art-dev@sha256_fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48.tgz -o /var/mnt/ocp-images/ocp-v4.0-art-dev@sha256_fe8d01e2de1a04428b2dfd71711a6893ea84ad22890ea29ca92185705fc11f48.tgz
 + for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/images-4.10.3//ocp-v4.0-art-dev@sha256_2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f.tgz -o /var/mnt/images-4.10.3/ocp-v4.0-art-dev@sha256_2b72364802973bb7f6a39e1694b9fc13e84e13a317863d07f9204c7762e9b29f.tgz
-....
-+ for file in $(curl -s http://${1} | grep href | sed 's/.*href="//' | sed 's/".*//' | grep '^[0-9a-zA-Z].*')
-+ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp_images.txt.4.10.3 -o /var/mnt/ocp-images-4.10.3/ocp_images.txt.4.10.3
-unmount partition and shutting down
++ curl -s http://10.19.138.94/ocp-images-4.10.3//ocp_images.txt.4.10.3 -o /var/mnt/ocp-images/ocp_images.txt.4.10.3
+unmount partition and shutting down...
+Connection to 10.19.140.20 closed by remote host.
+Pre staged server ready to be delivered...
 ...
 ```
+
+At this point we need to remove the first device of the virtual machine. Note that the partition and artifacts are stored in the second device, that nos is becoming the first and only one :). For instance, you can use virt-manager and just remove the first device.
+
+## Create the ignition overrides
+
+
+## Create the Assisted Service cluster install
+
 
