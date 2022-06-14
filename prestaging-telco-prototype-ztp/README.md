@@ -241,4 +241,11 @@ $ echo "{\"config\":$(jq -c . pointer.ign | jq -R)}" > pointer.patch
 
 ## Create the Assisted Service cluster install
 
+```sh
+$ ./02-create-ai-cluster.sh 
+Creating cluster virt01
+Nothing updated in cluster virt01
+This is the f16a9461-d8b7-47f9-85c3-25e645d8a44b....
+{"cluster_id":"53a04a79-e4c7-4405-9c63-9ff902220af1","cpu_architecture":"x86_64","created_at":"2022-06-14T15:56:14.998999Z","download_url":"http://10.1.178.20:6016/images/f16a9461-d8b7-47f9-85c3-25e645d8a44b?arch=x86_64&type=minimal-iso&version=4.10","email_domain":"Unknown","expires_at":"0001-01-01T00:00:00.000Z","href":"/api/assisted-install/v2/infra-envs/f16a9461-d8b7-47f9-85c3-25e645d8a44b","id":"f16a9461-d8b7-47f9-85c3-25e645d8a44b","ignition_config_override":"{\"ignition\":{\"version\":\"3.1.0\"},\"systemd\":{\"units\":[{\"name\":\"var-mnt.mount\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Mount precached container images\\nBefore=precache-images.service\\nStopWhenUnneeded=true\\n\\n[Mount]\\nWhat=/dev/disk/by-partlabel/data\\nWhere=/var/mnt\\nType=xfs\\nTimeoutSec=30\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"precache-images.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Extracts the precached images into containers storage\\nRequires=var-mnt.mount\\nAfter=var-mnt.mount\\nBefore=agent.service\\n\\n[Service]\\nType=oneshot\\nUser=root\\nWorkingDirectory=/var/mnt/ai-images\\nExecStart=bash /var/mnt/ai-images/extract-ai.sh\\nExecStartPost=systemctl disable var-mnt.mount\\nExecStop=systemctl stop var-mnt.mount\\nTimeoutStopSec=45\\n\\n[Install]\\nWantedBy=multi-user.target default.target\\nWantedBy=agent.service\"}]}}","kind":"InfraEnv","name":"virt01_infra-env","openshift_version":"4.10","proxy":{},"pull_secret_set":true,"ssh_authorized_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local","type":"minimal-iso","updated_at":"2022-06-14T15:56:16.533111Z","user_name":"admin"}
+```
 
