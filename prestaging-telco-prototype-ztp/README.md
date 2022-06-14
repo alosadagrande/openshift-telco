@@ -243,9 +243,245 @@ $ echo "{\"config\":$(jq -c . pointer.ign | jq -R)}" > pointer.patch
 
 ```sh
 $ ./02-create-ai-cluster.sh 
+
 Creating cluster virt01
 Nothing updated in cluster virt01
-This is the f16a9461-d8b7-47f9-85c3-25e645d8a44b....
-{"cluster_id":"53a04a79-e4c7-4405-9c63-9ff902220af1","cpu_architecture":"x86_64","created_at":"2022-06-14T15:56:14.998999Z","download_url":"http://10.1.178.20:6016/images/f16a9461-d8b7-47f9-85c3-25e645d8a44b?arch=x86_64&type=minimal-iso&version=4.10","email_domain":"Unknown","expires_at":"0001-01-01T00:00:00.000Z","href":"/api/assisted-install/v2/infra-envs/f16a9461-d8b7-47f9-85c3-25e645d8a44b","id":"f16a9461-d8b7-47f9-85c3-25e645d8a44b","ignition_config_override":"{\"ignition\":{\"version\":\"3.1.0\"},\"systemd\":{\"units\":[{\"name\":\"var-mnt.mount\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Mount precached container images\\nBefore=precache-images.service\\nStopWhenUnneeded=true\\n\\n[Mount]\\nWhat=/dev/disk/by-partlabel/data\\nWhere=/var/mnt\\nType=xfs\\nTimeoutSec=30\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"precache-images.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Extracts the precached images into containers storage\\nRequires=var-mnt.mount\\nAfter=var-mnt.mount\\nBefore=agent.service\\n\\n[Service]\\nType=oneshot\\nUser=root\\nWorkingDirectory=/var/mnt/ai-images\\nExecStart=bash /var/mnt/ai-images/extract-ai.sh\\nExecStartPost=systemctl disable var-mnt.mount\\nExecStop=systemctl stop var-mnt.mount\\nTimeoutStopSec=45\\n\\n[Install]\\nWantedBy=multi-user.target default.target\\nWantedBy=agent.service\"}]}}","kind":"InfraEnv","name":"virt01_infra-env","openshift_version":"4.10","proxy":{},"pull_secret_set":true,"ssh_authorized_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local","type":"minimal-iso","updated_at":"2022-06-14T15:56:16.533111Z","user_name":"admin"}
+This is the 96c1f373-dc20-4301-8e37-6edc19a5d6cd....
+{"cluster_id":"22dee1dc-e3ee-4af1-8029-a2a14b5d54f5","cpu_architecture":"x86_64","created_at":"2022-06-14T21:02:59.99569Z","download_url":"http://10.1.178.20:6016/images/96c1f373-dc20-4301-8e37-6edc19a5d6cd?arch=x86_64&type=minimal-iso&version=4.10","email_domain":"Unknown","expires_at":"0001-01-01T00:00:00.000Z","href":"/api/assisted-install/v2/infra-envs/96c1f373-dc20-4301-8e37-6edc19a5d6cd","id":"96c1f373-dc20-4301-8e37-6edc19a5d6cd","ignition_config_override":"{\"ignition\":{\"version\":\"3.1.0\"},\"systemd\":{\"units\":[{\"name\":\"var-mnt.mount\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Mount precached container images\\nBefore=precache-images.service\\nStopWhenUnneeded=true\\n\\n[Mount]\\nWhat=/dev/disk/by-partlabel/data\\nWhere=/var/mnt\\nType=xfs\\nTimeoutSec=30\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"precache-images.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=Extracts the precached images into containers storage\\nRequires=var-mnt.mount\\nAfter=var-mnt.mount\\nBefore=agent.service\\n\\n[Service]\\nType=oneshot\\nUser=root\\nWorkingDirectory=/var/mnt/ai-images\\nExecStart=bash /var/mnt/ai-images/extract-ai.sh\\nExecStartPost=systemctl disable var-mnt.mount\\nExecStop=systemctl stop var-mnt.mount\\nTimeoutStopSec=45\\n\\n[Install]\\nWantedBy=multi-user.target default.target\\nWantedBy=agent.service\"}]}}","kind":"InfraEnv","name":"virt01_infra-env","openshift_version":"4.10","proxy":{},"pull_secret_set":true,"ssh_authorized_key":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local","type":"minimal-iso","updated_at":"2022-06-14T21:03:03.223399Z","user_name":"admin"}
+[OK] ISO is available to download. Run aicli download iso <cluster> or wget
+Validating discovery ignition...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  9059  100  9059    0     0  25580      0 --:--:-- --:--:-- --:--:-- 25662
+{
+  "ignition": {
+    "config": {
+      "replace": {
+        "verification": {}
+      }
+    },
+    "proxy": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.1.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "groups": [
+          "sudo"
+        ],
+        "name": "core",
+        "passwordHash": "!",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "files": [
+      {
+        "group": {},
+        "overwrite": true,
+        "path": "/usr/local/bin/agent-fix-bz1964591",
+        "user": {
+          "name": "root"
+        },
+        "contents": {
+          "source": "data:,%23%21%2Fusr%2Fbin%2Fsh%0A%0A%23%20This%20script%20is%20a%20workaround%20for%20bugzilla%201964591%20where%20symlinks%20inside%20%2Fvar%2Flib%2Fcontainers%2F%20get%0A%23%20corrupted%20under%20some%20circumstances.%0A%23%0A%23%20In%20order%20to%20let%20agent.service%20start%20correctly%20we%20are%20checking%20here%20whether%20the%20requested%0A%23%20container%20image%20exists%20and%20in%20case%20%22podman%20images%22%20returns%20an%20error%20we%20try%20removing%20the%20faulty%0A%23%20image.%0A%23%0A%23%20In%20such%20a%20scenario%20agent.service%20will%20detect%20the%20image%20is%20not%20present%20and%20pull%20it%20again.%20In%20case%0A%23%20the%20image%20is%20present%20and%20can%20be%20detected%20correctly%2C%20no%20any%20action%20is%20required.%0A%0AIMAGE=$%28echo%20$1%20%7C%20sed%20%27s%2F:.%2A%2F%2F%27%29%0Apodman%20images%20%7C%20grep%20$IMAGE%20%7C%7C%20podman%20rmi%20--force%20$1%20%7C%7C%20true%0A",
+          "verification": {}
+        },
+        "mode": 755
+      },
+      {
+        "group": {},
+        "overwrite": true,
+        "path": "/etc/motd",
+        "user": {
+          "name": "root"
+        },
+        "contents": {
+          "source": "data:,%0A%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%0AThis%20is%20a%20host%20being%20installed%20by%20the%20OpenShift%20Assisted%20Installer.%0AIt%20will%20be%20installed%20from%20scratch%20during%20the%20installation.%0A%0AThe%20primary%20service%20is%20agent.service.%20To%20watch%20its%20status%2C%20run:%0Asudo%20journalctl%20-u%20agent.service%0A%0ATo%20view%20the%20agent%20log%2C%20run:%0Asudo%20journalctl%20TAG=agent%0A%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%20%20%2A%2A%0A",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "group": {},
+        "overwrite": true,
+        "path": "/etc/NetworkManager/conf.d/01-ipv6.conf",
+        "user": {
+          "name": "root"
+        },
+        "contents": {
+          "source": "data:,%0A%5Bconnection%5D%0Aipv6.dhcp-iaid=mac%0Aipv6.dhcp-duid=ll%0A",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "group": {},
+        "overwrite": true,
+        "path": "/root/.docker/config.json",
+        "user": {
+          "name": "root"
+        },
+        "contents": {
+          "source": "data:,%7B%22auths%22:%7B%22cloud.openshift.com%22:%7B%22auth%22:%22b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K2Fsb3NhZGFncmVkaGF0Y29tMXNiejh5MTJkb2JpamczZW9veWx6cG9jcWRmOjEyOTYzQ0hFS0NDVlNSTjRLTDdRRThaODhWR1E1UUwwUUJCV0NBMk9LTlZUN0pZMVI3M0RKQkRNUjZVTjVRRTY=%22%2C%22email%22:%22alosadag@redhat.com%22%7D%2C%22quay.io%22:%7B%22auth%22:%22b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K2Fsb3NhZGFncmVkaGF0Y29tMXNiejh5MTJkb2JpamczZW9veWx6cG9jcWRmOjEyOTYzQ0hFS0NDVlNSTjRLTDdRRThaODhWR1E1UUwwUUJCV0NBMk9LTlZUN0pZMVI3M0RKQkRNUjZVTjVRRTY=%22%2C%22email%22:%22alosadag@redhat.com%22%7D%2C%22registry.connect.redhat.com%22:%7B%22auth%22:%22NTExNDk5MzF8dWhjLTFTYlo4eTEyRE9CSWpnM2Vvb1lMWnBPY3FkRjpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmhZelJtWWpjek0yWm1ZbVEwTVdZd09HTmtZVFkxWmpsall6VmxOemN4TVNKOS5DRWl5TS1iNEg3dXFRQlJNVTJteEJnR2lTNHZqUlViRTl4R3VfOFBEQ2VCR1o3c2tralpxSVo4UWJab1pzSHZ6dXloV010VnBSdEE2VXJqckdlazc5dnk3SDRKOXF6aThuTl94YnFYYTJLUUI5dURjYWQzUHgxeU1BX1ZxcUhHQXNxMHAzQ0FKN0ktQnIxZ1VGc1FQSExaMkF0NDNzYlhVeGlweTBHanhZS1N6MEFRR0RDcU5hakJVZTRhRGNRNFJ3cHNFX1J6bFEyenpkNVQwT0UzVXpFdTBPMUp2MmozS2Z1UlkwOFY5aXF2NlliRURyU3JTeEVXNnZlNnE1MHdJc3h0T2FPc1ZFT1hIVFlrNDJ3Y2h6M19RWGdvbF9hS0tIOV9SN0liU0ViQmlMSjJJRGZUUEpJcTdSQUU5dEZKVGF1MXZYa2VDdjdLdHdiTXBVVFMyb3AwOTJEZnFwR0ZGQzFweGxMeE9HMkZsb28xZjNQQnB2cEpCc0UwcF9US3hMcDNucE43RndoY3NaX2tMRmJ5YmUtMTlxNnFBU0NOSmlRN0YxeEtMaHFPYmM5cFl2WXQwd3ZWUVhyRHhwYjVMME5oQ0RGUkRzenpVcERvQ3dyUWxzMEtnYWw3Y1c0UlprWVdWYUQ3SHhTZ2EwMjVVaVVmVVE5VVpvUTRIM3k1cmJ0anlOMmFKOGQtLVE0NUdlTXp0VlFzeE5XNHJQSWJVX2Y4S0ZIT1U3RFV5WVJoVGVubndSeDQyT1B6bkFSbUFPLTh3WWhSalVXVjRxX1hFRXcyWWR1TDNtRVRXTHBJOTNqOUcxZmZsM2s3XzBXWmRiZWl2UE9EWFYxRmNqYzRnOXNJQkgtaHNPVWprcVNiWVd6QkxkU19HeXRqTENnZVZOdFlvVDNnVlhObw==%22%2C%22email%22:%22alosadag@redhat.com%22%7D%2C%22registry.redhat.io%22:%7B%22auth%22:%22NTExNDk5MzF8dWhjLTFTYlo4eTEyRE9CSWpnM2Vvb1lMWnBPY3FkRjpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmhZelJtWWpjek0yWm1ZbVEwTVdZd09HTmtZVFkxWmpsall6VmxOemN4TVNKOS5DRWl5TS1iNEg3dXFRQlJNVTJteEJnR2lTNHZqUlViRTl4R3VfOFBEQ2VCR1o3c2tralpxSVo4UWJab1pzSHZ6dXloV010VnBSdEE2VXJqckdlazc5dnk3SDRKOXF6aThuTl94YnFYYTJLUUI5dURjYWQzUHgxeU1BX1ZxcUhHQXNxMHAzQ0FKN0ktQnIxZ1VGc1FQSExaMkF0NDNzYlhVeGlweTBHanhZS1N6MEFRR0RDcU5hakJVZTRhRGNRNFJ3cHNFX1J6bFEyenpkNVQwT0UzVXpFdTBPMUp2MmozS2Z1UlkwOFY5aXF2NlliRURyU3JTeEVXNnZlNnE1MHdJc3h0T2FPc1ZFT1hIVFlrNDJ3Y2h6M19RWGdvbF9hS0tIOV9SN0liU0ViQmlMSjJJRGZUUEpJcTdSQUU5dEZKVGF1MXZYa2VDdjdLdHdiTXBVVFMyb3AwOTJEZnFwR0ZGQzFweGxMeE9HMkZsb28xZjNQQnB2cEpCc0UwcF9US3hMcDNucE43RndoY3NaX2tMRmJ5YmUtMTlxNnFBU0NOSmlRN0YxeEtMaHFPYmM5cFl2WXQwd3ZWUVhyRHhwYjVMME5oQ0RGUkRzenpVcERvQ3dyUWxzMEtnYWw3Y1c0UlprWVdWYUQ3SHhTZ2EwMjVVaVVmVVE5VVpvUTRIM3k1cmJ0anlOMmFKOGQtLVE0NUdlTXp0VlFzeE5XNHJQSWJVX2Y4S0ZIT1U3RFV5WVJoVGVubndSeDQyT1B6bkFSbUFPLTh3WWhSalVXVjRxX1hFRXcyWWR1TDNtRVRXTHBJOTNqOUcxZmZsM2s3XzBXWmRiZWl2UE9EWFYxRmNqYzRnOXNJQkgtaHNPVWprcVNiWVd6QkxkU19HeXRqTENnZVZOdFlvVDNnVlhObw==%22%2C%22email%22:%22alosadag@redhat.com%22%7D%2C%22quay.io:443%22:%7B%22auth%22:%22YWxvc2FkYWc6UDBaalRYTHdHcVBxbW0vYXRBL2JlKzFDTEN4amVKTXRueFJNUUVGRDZFTzlkU3VWdG04Rk1TSnZJM3BPVWlnQw==%22%2C%22email%22:%22%22%7D%2C%22registry.ci.openshift.org%22:%7B%22auth%22:%22YWxvc2FkYWc6c2hhMjU2fjdPeEx0anJfcjYzc1hORTFIeGxpT2FKZDNFYWtsVnBqaFdNdFNTOFU1aW8=%22%7D%7D%7D",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "group": {},
+        "overwrite": true,
+        "path": "/root/assisted.te",
+        "user": {
+          "name": "root"
+        },
+        "contents": {
+          "source": "data:text/plain;base64,Cm1vZHVsZSBhc3Npc3RlZCAxLjA7CnJlcXVpcmUgewogICAgICAgIHR5cGUgY2hyb255ZF90OwogICAgICAgIHR5cGUgY29udGFpbmVyX2ZpbGVfdDsKICAgICAgICB0eXBlIHNwY190OwogICAgICAgIGNsYXNzIHVuaXhfZGdyYW1fc29ja2V0IHNlbmR0bzsKICAgICAgICBjbGFzcyBkaXIgc2VhcmNoOwogICAgICAgIGNsYXNzIHNvY2tfZmlsZSB3cml0ZTsKfQojPT09PT09PT09PT09PSBjaHJvbnlkX3QgPT09PT09PT09PT09PT0KYWxsb3cgY2hyb255ZF90IGNvbnRhaW5lcl9maWxlX3Q6ZGlyIHNlYXJjaDsKYWxsb3cgY2hyb255ZF90IGNvbnRhaW5lcl9maWxlX3Q6c29ja19maWxlIHdyaXRlOwphbGxvdyBjaHJvbnlkX3Qgc3BjX3Q6dW5peF9kZ3JhbV9zb2NrZXQgc2VuZHRvOwo=",
+          "verification": {}
+        },
+        "mode": 420
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Service]\nType=simple\nRestart=always\nRestartSec=3\nStartLimitInterval=0\nEnvironment=HTTP_PROXY=\nEnvironment=http_proxy=\nEnvironment=HTTPS_PROXY=\nEnvironment=https_proxy=\nEnvironment=NO_PROXY=\nEnvironment=no_proxy=\nTimeoutStartSec=600\nExecStartPre=/usr/local/bin/agent-fix-bz1964591 quay.io/edge-infrastructure/assisted-installer-agent:latest\nExecStartPre=podman run --privileged --rm -v /usr/local/bin:/hostbin quay.io/edge-infrastructure/assisted-installer-agent:latest cp /usr/bin/agent /hostbin\nExecStart=/usr/local/bin/agent --url http://10.1.178.20:6000 --infra-env-id 96c1f373-dc20-4301-8e37-6edc19a5d6cd --agent-version quay.io/edge-infrastructure/assisted-installer-agent:latest --insecure=true  \n\n[Unit]\nWants=network-online.target\nAfter=network-online.target\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "agent.service"
+      },
+      {
+        "contents": "[Service]\nType=oneshot\nExecStartPre=checkmodule -M -m -o /root/assisted.mod /root/assisted.te\nExecStartPre=semodule_package -o /root/assisted.pp -m /root/assisted.mod\nExecStart=semodule -i /root/assisted.pp\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "selinux.service"
+      },
+      {
+        "contents": "[Unit]\nDescription=Mount precached container images\nBefore=precache-images.service\nStopWhenUnneeded=true\n\n[Mount]\nWhat=/dev/disk/by-partlabel/data\nWhere=/var/mnt\nType=xfs\nTimeoutSec=30\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "var-mnt.mount"
+      },
+      {
+        "contents": "[Unit]\nDescription=Extracts the precached images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nBefore=agent.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/ai-images\nExecStart=bash /var/mnt/ai-images/extract-ai.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=multi-user.target default.target\nWantedBy=agent.service",
+        "enabled": true,
+        "name": "precache-images.service"
+      }
+    ]
+  }
+}
+Download the ISO and mount it into the VM. Then press enter to continue
+Wait until hosts are ready in Assisted Installer
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+Waiting 10s more...
+
+This is the HOST: snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com and HOSTID: 3b5f97db-464f-4792-8a97-cfb7b5c63a30 values
+Updating Host snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com
+Validating configuration...
+
+bootstrap: True
+checked_in_at: 2022-06-14T21:14:33.162Z
+cluster_id: 4aca008e-38d1-40b6-a5ef-0bdda93bf5c8
+created_at: 2022-06-14T21:14:32.893096Z
+id: 3b5f97db-464f-4792-8a97-cfb7b5c63a30
+ignition_config_overrides: {"ignition":{"version":"3.1.0"},"passwd":{"users":[{"groups":["sudo"],"name":"core","passwordHash":"!","sshAuthorizedKeys":["ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local"]}]},"systemd":{"units":[{"name":"var-mnt.mount","enabled":true,"contents":"[Unit]\nDescription=Mount precached container images\nBefore=precache-images.service\nStopWhenUnneeded=true\n\n[Mount]\nWhat=/dev/disk/by-partlabel/data\nWhere=/var/mnt\nType=xfs\nTimeoutSec=30\n\n[Install]\nWantedBy=multi-user.target"},{"name":"precache-ocp-images.service","enabled":true,"contents":"[Unit]\nDescription=Extracts the precached OCP images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nBefore=machine-config-daemon-pull.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/ocp-images\nExecStart=bash /var/mnt/ocp-images/extract-ocp.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=machine-config-daemon-pull.service"}]}}
+infra_env_id: 2ae4bd72-93b9-4862-97af-e297447b70dd
+installation_disk_id: /dev/disk/by-path/pci-0000:05:00.0
+installation_disk_path: /dev/vda
+installer_args: ["--save-partlabel","data","--copy-network"]
+logs_started_at: 0001-01-01T00:00:00.000Z
+progress: {'stage_started_at': '0001-01-01T00:00:00.000Z', 'stage_updated_at': '0001-01-01T00:00:00.000Z'}
+requested_hostname: snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com
+role: master
+stage_started_at: 0001-01-01T00:00:00.000Z
+stage_updated_at: 0001-01-01T00:00:00.000Z
+status: insufficient
+status_info: Host cannot be installed due to following failing validation(s): Host couldn't synchronize with any NTP server
+status_updated_at: 2022-06-14T21:14:34.948Z
+timestamp: 1655241274
+updated_at: 2022-06-14T21:14:52.411736Z
+user_name: admin
+
+Press enter to continue
+
+Updating Cluster virt01
+Printing cluster information...
+Validating cluster info....
+base_dns_domain: eko4.cloud.lab.eng.bos.redhat.com
+cluster_networks: [{'cluster_id': '4aca008e-38d1-40b6-a5ef-0bdda93bf5c8', 'cidr': '10.128.0.0/14', 'host_prefix': 23}]
+connectivity_majority_groups: {"10.19.136.0/21":[],"2620:52:0:1388::/64":[],"IPv4":[],"IPv6":[]}
+controller_logs_collected_at: 0001-01-01 00:00:00+00:00
+controller_logs_started_at: 0001-01-01 00:00:00+00:00
+cpu_architecture: x86_64
+created_at: 2022-06-14 21:09:37.212004+00:00
+disk_encryption: {'enable_on': 'none', 'mode': 'tpmv2', 'tang_servers': None}
+email_domain: Unknown
+enabled_host_count: 1
+feature_usage: {"OVN network type":{"id":"OVN_NETWORK_TYPE","name":"OVN network type"},"SNO":{"id":"SNO","name":"SNO"}}
+high_availability_mode: None
+hyperthreading: all
+id: 4aca008e-38d1-40b6-a5ef-0bdda93bf5c8
+ignition_endpoint: {'url': None, 'ca_certificate': None}
+install_completed_at: 0001-01-01 00:00:00+00:00
+install_started_at: 0001-01-01 00:00:00+00:00
+machine_networks: [{'cluster_id': '4aca008e-38d1-40b6-a5ef-0bdda93bf5c8', 'cidr': '10.19.136.0/21'}]
+monitored_operators: [{'cluster_id': '4aca008e-38d1-40b6-a5ef-0bdda93bf5c8', 'name': 'console', 'namespace': None, 'subscription_name': None, 'operator_type': 'builtin', 'properties': None, 'timeout_seconds': 3600, 'status': None, 'status_info': None, 'status_updated_at': datetime.datetime(1, 1, 1, 0, 0, tzinfo=tzutc())}]
+name: virt01
+network_type: OVNKubernetes
+ocp_release_image: quay.io/openshift-release-dev/ocp-release:4.10.3-x86_64
+openshift_version: 4.10.3
+platform: {'type': 'baremetal', 'ovirt': {'fqdn': None, 'username': None, 'password': None, 'insecure': True, 'ca_bundle': None, 'cluster_id': None, 'storage_domain_id': None, 'network_name': 'ovirtmgmt', 'vnic_profile_id': None}}
+ready_host_count: 1
+schedulable_masters: False
+service_networks: [{'cluster_id': '4aca008e-38d1-40b6-a5ef-0bdda93bf5c8', 'cidr': '172.30.0.0/16'}]
+status: ready
+status_info: Cluster ready to be installed
+status_updated_at: 2022-06-14 21:15:40.949000+00:00
+total_host_count: 1
+updated_at: 2022-06-14 21:15:56.351478+00:00
+user_managed_networking: True
+user_name: admin
+
+Starting cluster virt01
+Cluster installation started...
+
++-----------------------------+--------------------------------------+----------------------------+-----------------------------------+
+|           Cluster           |                  Id                  |           Status           |             Dns Domain            |
++-----------------------------+--------------------------------------+----------------------------+-----------------------------------+
+| test-infra-cluster-339770e9 | 386db79b-0dfa-40df-93d5-9862d32eeb6f |           ready            |             redhat.com            |
+| test-infra-cluster-dfc62940 | 510bc21d-2a96-4d11-be37-212a526dcb51 |         installed          |             redhat.com            |
+|            virt01           | 4aca008e-38d1-40b6-a5ef-0bdda93bf5c8 | preparing-for-installation | eko4.cloud.lab.eng.bos.redhat.com |
++-----------------------------+--------------------------------------+----------------------------+-----------------------------------+
+Waiting 30s.......
++-----------------------------+--------------------------------------+------------+-----------------------------------+
+|           Cluster           |                  Id                  |   Status   |             Dns Domain            |
++-----------------------------+--------------------------------------+------------+-----------------------------------+
+| test-infra-cluster-339770e9 | 386db79b-0dfa-40df-93d5-9862d32eeb6f |   ready    |             redhat.com            |
+| test-infra-cluster-dfc62940 | 510bc21d-2a96-4d11-be37-212a526dcb51 | installed  |             redhat.com            |
+|            virt01           | 4aca008e-38d1-40b6-a5ef-0bdda93bf5c8 | installing | eko4.cloud.lab.eng.bos.redhat.com |
++-----------------------------+--------------------------------------+------------+-----------------------------------+
 ```
 
