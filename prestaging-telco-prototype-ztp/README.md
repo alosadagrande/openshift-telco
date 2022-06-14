@@ -130,20 +130,6 @@ UEFI enabled...
 Adding scripts to populate the partition with artifacts...
 Deploying Vms...
 snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com deployed on eko4
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
-Someone could be eavesdropping on you right now (man-in-the-middle attack)!
-It is also possible that a host key has just been changed.
-The fingerprint for the ED25519 key sent by the remote host is
-SHA256:yBK484dB+AsyArjJmxscW4ODzpM7AIxAnOBiyfcCt4M.
-Please contact your system administrator.
-Add correct host key in /home/alosadag/.ssh/known_hosts to get rid of this message.
-Offending ECDSA key in /home/alosadag/.ssh/known_hosts:104
-Password authentication is disabled to avoid man-in-the-middle attacks.
-Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
-UpdateHostkeys is disabled because the host key is not trusted.
 
 creating the GPT partition at the end of device vdb, format vdb1 as XFS and mount on /var/mnt
 + sgdisk -n 1:120000000 /dev/vdb -g
