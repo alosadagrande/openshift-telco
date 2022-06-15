@@ -24,11 +24,11 @@ fi
 echo "Validating discovery ignition..."
 curl "${AI_URL}/api/assisted-install/v2/infra-envs/${INFRAENVID}/downloads/files?file_name=discovery.ign" -H "accept: application/octet-stream" | jq .
 
-read -p "Press enter to continue"
+read -p "Download the ISO and mount it into the VM. Then press enter to continue"
 
 echo "Wait until hosts are ready in Assisted Installer"
 while true; do
-	hosts_ready=$(aicli list hosts | grep $CLUSTER_NAME | grep "insufficient" | wc -l)
+	hosts_ready=$(aicli list hosts | grep $CLUSTER_NAME | grep "known" | wc -l)
         if [ "$hosts_ready" -eq "$CLUSTER_NODES" ]; then
 		break
 	fi
@@ -36,10 +36,12 @@ while true; do
 	sleep 10
 done
 
+#aicli wait host -n 1 ${INFRAENVID}
+
 #Get host name
 HOST=$(aicli list host | grep $CLUSTER_NAME | tail -2 | head -1 | awk -F "|" '{print$2}' | tr -d ' ')
 HOSTID=$(aicli list host | grep $CLUSTER_NAME | tail -2 | head -1 | awk -F "|" '{print$3}' | tr -d ' ')
-echo "This is the HOST: $HOST and HOSTID: $HOSTID values"
+echo "Host registered as: $HOST with the HOSTID: $HOSTID"
 
 aicli update host ${HOST} -P extra_args="--save-partlabel data --copy-network" #--image-file=/var/tmp/modified-rhcos-4.10.3-x86_64-metal.x86_64.raw.gz
 curl -X PATCH "${AI_HOST}:6000/api/assisted-install/v2/infra-envs/${INFRAENVID}/hosts/${HOSTID}/ignition" -H "accept: application/json" -H "Content-Type: application/json" -d @ignition-files/pointer.patch
@@ -48,22 +50,22 @@ aicli info host $HOST
 #echo "Checking host-ignition-params...."
 #curl "${AI_HOST}:6000/api/assisted-install/v2/infra-envs/${INFRAENVID}/hosts/${HOSTID}" -H "accept: application/json" -H "Content-Type: application/json" | jq . | grep ignition
 
-read -p "Press enter to continue"
+read -p "Verify the host configuration, Then press enter to continue"
 
 aicli update cluster ${CLUSTER_NAME} -P machine_networks=[10.19.136.0/21] 
 echo -e "\e[0m Printing cluster information..."
 echo "Validating cluster info...."
 aicli info cluster $CLUSTER_NAME
 
-echo "Wait until cluster is ready to be installed"
-while true; do
-        cluster_ready=$(aicli list cluster | grep $CLUSTER_NAME | cut -d "|" -f4 | tr -d ' ')
-        if [ $cluster_ready == "ready" ]; then
-                break
-        fi
-        echo "Waiting 10s more..."
-        sleep 10
-done
+#echo "Wait until cluster is ready to be installed"
+#while true; do
+#        cluster_ready=$(aicli list cluster | grep $CLUSTER_NAME | cut -d "|" -f4 | tr -d ' ')
+#        if [ $cluster_ready == "ready" ]; then
+#                break
+#        fi
+#        echo "Waiting 10s more..."
+#        sleep 10
+#done
 
 aicli start cluster $CLUSTER_NAME
 

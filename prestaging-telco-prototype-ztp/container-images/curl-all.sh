@@ -2,7 +2,7 @@
 
 HTTP_IP=$1
 FOLDER=$2
-
+OCP_RELEASE="4.10.3"
 curl_artifacts ()
 {
   HTTPD=$1
@@ -15,8 +15,8 @@ curl_artifacts ()
   done
 }
 
-mkdir -p ${FOLDER}/images-4.10.3
-mkdir -p ${FOLDER}/ocp-images-4.10.3
+mkdir -p ${FOLDER}/ai-images
+mkdir -p ${FOLDER}/ocp-images
 curl_artifacts ${HTTP_IP} ${FOLDER}
-curl_artifacts ${HTTP_IP}/images-4.10.3/ ${FOLDER}/images-4.10.3
-curl_artifacts ${HTTP_IP}/ocp-images-4.10.3/ ${FOLDER}/ocp-images-4.10.3
+curl_artifacts ${HTTP_IP}/images-${OCP_RELEASE}/ ${FOLDER}/ai-images
+curl_artifacts ${HTTP_IP}/ocp-images-${OCP_RELEASE}/ ${FOLDER}/ocp-images
