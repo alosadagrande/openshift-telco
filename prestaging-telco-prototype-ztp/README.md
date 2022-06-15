@@ -483,5 +483,32 @@ Waiting 30s.......
 | test-infra-cluster-dfc62940 | 510bc21d-2a96-4d11-be37-212a526dcb51 | installed  |             redhat.com            |
 |            virt01           | 4aca008e-38d1-40b6-a5ef-0bdda93bf5c8 | installing | eko4.cloud.lab.eng.bos.redhat.com |
 +-----------------------------+--------------------------------------+------------+-----------------------------------+
+...
+...
+Waiting 30s.......
++-----------------------------+--------------------------------------+------------+-----------------------------------+
+|           Cluster           |                  Id                  |   Status   |             Dns Domain            |
++-----------------------------+--------------------------------------+------------+-----------------------------------+
+| test-infra-cluster-339770e9 | 386db79b-0dfa-40df-93d5-9862d32eeb6f |   ready    |             redhat.com            |
+| test-infra-cluster-dfc62940 | 510bc21d-2a96-4d11-be37-212a526dcb51 | installed  |             redhat.com            |
+|            virt01           | 78746e66-2345-4609-ba5c-36acf1cce38b | finalizing | eko4.cloud.lab.eng.bos.redhat.com |
++-----------------------------+--------------------------------------+------------+-----------------------------------+
++--------------------------------------------------+--------------------------------------+-----------------------------+-------------------------------+-----------+-------------------+----------------+
+|                       Host                       |                  Id                  |           Cluster           |            Infraenv           |   Status  |        Role       |       Ip       |
++--------------------------------------------------+--------------------------------------+-----------------------------+-------------------------------+-----------+-------------------+----------------+
+|       386db79b-0dfa-40df-93d5-9862d32eeb6f       | 6942d592-5fe1-4163-9c9d-2f64ba145775 | test-infra-cluster-339770e9 | test-infra-infra-env-b9f8a084 |   known   |       master      | 192.168.127.10 |
+| snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com | e3cc8e02-7e7f-4c2e-b257-88b386dbedf4 |            virt01           |        virt01_infra-env       | installed | master(bootstrap) |  10.19.140.20  |
+|       test-infra-cluster-339770e9-master-1       | 0555ac4e-1235-4bc5-a7a4-28c4a73d0f03 | test-infra-cluster-339770e9 | test-infra-infra-env-b9f8a084 |   known   |       master      | 192.168.127.11 |
+|       test-infra-cluster-339770e9-master-2       | bb88df6b-887e-4ea6-8b62-cd5001c5b78d | test-infra-cluster-339770e9 | test-infra-infra-env-b9f8a084 |   known   |       master      | 192.168.127.12 |
+|       test-infra-cluster-dfc62940-master-0       | f33dde23-92b4-47f5-9ff1-74dbd14a6111 | test-infra-cluster-dfc62940 | test-infra-infra-env-54e90d48 | installed | master(bootstrap) | 192.168.127.10 |
++--------------------------------------------------+--------------------------------------+-----------------------------+-------------------------------+-----------+-------------------+----------------+
+Waiting 30s.......
+Downloading Kubeconfig for Cluster virt01 in /home/alosadag/Documents/CNF/sno-eko4/virt01//kubeconfig.virt01
+Installation completed. You can start using your new cluster. Credentials can be found in /home/alosadag/Documents/CNF/sno-eko4/virt01/auth/kubeconfig.virt01
+NAME                                                    STATUS   ROLES           AGE   VERSION
+node/snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com   Ready    master,worker   28m   v1.23.3+e419edf
+
+NAME                                         VERSION   AVAILABLE   PROGRESSING   SINCE   STATUS
+clusterversion.config.openshift.io/version   4.10.3    True        False         5m12s   Cluster version is 4.10.3
 ```
 
