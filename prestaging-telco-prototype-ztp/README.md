@@ -2,10 +2,16 @@
  
  This folder stores all the information and scripts required to prototype a factory pre-staging solution where all the generic installation artifacts are persistent on a disk, and the cluster deployment would retrieve everything from that local partition instead of using any external network.
  
+ ## Motivations
+
+In environments with limited bandwidth and using the RH GitOps ZTP solution to deploy a large number of clusters for RAN workloads, it might be desirable to avoid the use of the network for downloading the all the required artifacts to install a SNO cluster. Another point is the installation time, avoiding the download of all these bits through a low bandwith network will save a lot of time during installation and configuration of the cluster.
+ 
  # Structure
  
 * **01-create-vm.sh**. This helper scripts creates a virtual machine ready to be provisioned via ZTP with all the required precached artifacts and partition configured.
+
 * **02-create-ai-cluster.sh**. This helper scripts runs a provisioning workflow interacting with the Assisted Installer APIs
+
 * **container-images/** . This folder contains all the precached artifacts required to provision OCP with Assisted Installer.
   * curl-all.sh. This script is used by the 01-create-vm.sh script to download all the artifacts and scripts into the partition.
   * **ai-images/**. This folder contains all the artifacts needed during the initial phase of the provisioning where the AI agent is registered against the Assisted Service.
@@ -16,17 +22,23 @@
     * extract-ocp.sh. This script is in charge of extracting the artifacts into the container storage folder of the running OS. It uses the list of container images listed below. This script is executed once the RHCOS image is persisted into disk.
     * ocp_images.txt.4.10.3. This file contains a list of all the container images with its full container name needed for the OCP installation process. 
     * pull-ocp.sh. This script uses the above list to pull all the container images from the official location to a local compressed tarball. In this case it only downloads container images listed in the OCP release info (oc adm release info).
-  * **pre-cache/**. This folder contains all the tools to create the list of OCP images required to be precached. It is based on the [Cluster Group Upgrade precache feature](https://github.com/openshift-kni/cluster-group-upgrades-operator/tree/main/pre-cache).
+
+* **pre-cache/**. This folder contains all the tools to create the list of OCP images required to be precached. It is based on the [Cluster Group Upgrade precache feature](https://github.com/openshift-kni/cluster-group-upgrades-operator/tree/main/pre-cache).
     * release. This is the principal script that creates a list of all the OCP container images that needs to be pulled. That list is saved in a file called images.txt.$ocp_version. The same list will be used by pull-ocp.sh to download them in a tar.gz format.
-  * **create-gpt-partition.sh**. This script is called by the 01-create-vm.sh in order to create a GPT partition at the end of the disk.
-  * **ignition-files/**. This folder contains all the specific configurations applied to Assisted Service to override the default set up for the discovery and pointer ignition.
+
+* **create-gpt-partition.sh**. This script is called by the 01-create-vm.sh in order to create a GPT partition at the end of the disk.
+
+* **ignition-files/**. This folder contains all the specific configurations applied to Assisted Service to override the default set up for the discovery and pointer ignition.
     * discovery.ign. These are the ignition systemd units that need to be included into the discovery ignition that is part of the minimal ISO.
     * discovery.patch. This is the patch applied to the Assisted Service API to override the discovery ignition. Its content is created from the previous discovery.ign
     * pointer.ign. These are the ignition systemd units that need to be added when the coreos-installer utility is written RHCOS to disk.
     * pointer.patch. This is the patch applied to the Assisted Service API to override the pointer ignition. Its content is created from the previous pointer.ign.
-  * **profile-sno-rhcos.yaml**. This is a template used by the 01-create-vm.sh, well, actually it is used by [kcli](https://github.com/karmab/kcli) to create the KVM virtual machine. It includes memory, cpu, storage, network, etc... basically all the required configuration for creating a VM and furthermore a the extract-ocp and extract-initial scripts to be placed in the partition folder.
+
+* **profile-sno-rhcos.yaml**. This is a template used by the 01-create-vm.sh, well, actually it is used by [kcli](https://github.com/karmab/kcli) to create the KVM virtual machine. It includes memory, cpu, storage, network, etc... basically all the required configuration for creating a VM and furthermore a the extract-ocp and extract-initial scripts to be placed in the partition folder.
 
 # Workflow
+
+In this section it is detailed the different tasks that needs to be performed to install SNO from the precached artifacts saved in a local disk partition of the node.
 
 ## Pull the container images
 
@@ -218,9 +230,13 @@ Pre staged server ready to be delivered...
 ...
 ```
 
-At this point we need to remove the first device of the virtual machine. Note that the partition and artifacts are stored in the second device, that nos is becoming the first and only one :). For instance, you can use virt-manager and just remove the first device.
+At this point we need to remove the first device of the virtual machine. Note that the partition and artifacts are stored in the second device, that makes the second device becoming the first and the only one. For instance, you can use virt-manager and just remove the first device.
 
 ## Create the ignition overrides
+
+These are the configurations that needs to be applied to the Assisted Service which includes the different systemd units that will mount the pre-staged partition and extract the content into the local container storage folder.
+
+> :warning: The files that need to be applied are the ones ending with patch. It contains the override Assisted Service ignition parameter:
 
 ```
 $ cd ignition-files
@@ -240,6 +256,10 @@ $ echo "{\"config\":$(jq -c . pointer.ign | jq -R)}" > pointer.patch
 
 
 ## Create the Assisted Service cluster install
+
+Now, we are ready to start the installation by calling the Assisted Service:
+
+> ❗You will probably need to replace the value of some global vars included in this script for the ones that makes sense in your environment. Such as network config, hostname, pull secret, ssh key...
 
 ```sh
 $ ./02-create-ai-cluster.sh 
