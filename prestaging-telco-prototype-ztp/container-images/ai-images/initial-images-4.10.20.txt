@@ -1,3 +1,4 @@
+quay.io/alosadag/troubleshoot:latest
 quay.io/openshift-release-dev/ocp-release:4.10.20-x86_64
 registry.redhat.io/rhai-tech-preview/assisted-installer-rhel8:v1.0.0-175
 registry.redhat.io/rhai-tech-preview/assisted-installer-agent-rhel8:v1.0.0-156
