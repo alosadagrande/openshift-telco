@@ -1,0 +1,17 @@
+quay.io/openshift-release-dev/ocp-release@sha256:b89ada9261a1b257012469e90d7d4839d0d2f99654f5ce76394fa3f06522b600
+registry.redhat.io/rhai-tech-preview/assisted-installer-rhel8@sha256:93f771d1b7c4f704367c512e670495ee32c24d64892716d6919f5daf81465a3d
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:941b6eecb4ecda5796fe070e39e9328159e482fed3dcf09bf8d6c189f62a3c1a
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2d16f5c2f356d54154d78869ac6b088852d623cf5bad9d6e1c9c50640742ee8c
+registry.redhat.io/rhai-tech-preview/assisted-installer-agent-rhel8@sha256:39292a247202e2d1882cdcf23c8de4ec9c22dcebe3ce3da7e29e2b65dd203268
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:ec9d6b92d5edd85132736190e959e92b3506c5ad842f518b977fe0f3ecb6ea4b
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:9579fa1cc98e68d0fd414b4c8511e14062186d85ae1c8aeb1f2292e2edc46aa2
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:35f1c85a48b0c16562fdc2fd680ebef1a4785189862b5c08c7a7e2bbe285fc1b
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:1c7fe677acdf3ba670ee62ae2524adbe84972601b56ce9c17a99e3adee774dc3
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5ca849270c4ca182b2670e965bca0cea71004581ff128a76c232aac03d79649c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:002be9b4001d090ab4ed3a9c8950be14f6bde64df1178d9eef86f017c08980c7
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:911d53006058fdc8669b824da59c8ffbdf7adfda427448d161e36e1e196081ed
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:100d1f76dad34eeeb627b273d9ef43127e0bb59944d7e95db519a55cb4bdbf78
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:27c74864fdd34ee238e3be817f2a9b1dbb9d02ce53d2e2d3640b916b7bfe862e
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c09189b0b03bd631ad04db7f0519d717fec4a11321d2d665ee9dc10c11466f7c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:2e1c654191680c8e869a16124c8d2dd81e896da4aeff5677570a556d9e23f19c
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:fcb3cb6b22fe4946336955472cfbfd0d47034b837f3113cbcf219be77ad64cae
