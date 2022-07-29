@@ -1,11 +1,12 @@
 #!/bin/bash
 
 FOLDER="${FOLDER:-$(pwd)}"
-OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images-4.10.3.txt}"
+OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images.txt}"
+BINARY_FOLDER=/usr/local/bin
 
 pushd $FOLDER
 
-total_copies=$(sort -u $FOLDER/$OCP_RELEASE_LIST | wc -l)  # Required to keep track of the pull task vs total
+total_copies=$(sort -u $BINARY_FOLDER/$OCP_RELEASE_LIST | wc -l)  # Required to keep track of the pull task vs total
 current_copy=1
 
 while read -r line;
@@ -15,6 +16,7 @@ do
   podman image exists $uri
   if [[ $? -eq 0 ]]; then
       echo "Skipping existing image $tar"
+      echo "Copying ${uri} [${current_copy}/${total_copies}]"
       current_copy=$((current_copy + 1))
       continue
   fi
@@ -24,7 +26,7 @@ do
   echo "Copying ${uri} [${current_copy}/${total_copies}]"
   skopeo copy dir://$(pwd)/${tar} containers-storage:${uri}
   if [ $? -eq 0 ]; then rm -rf ${tar}; current_copy=$((current_copy + 1)); fi
-done < initial-images.txt
+done < ${OCP_RELEASE_LIST}
 
 # workaround while https://github.com/openshift/assisted-service/pull/3546
 #cp /var/mnt/modified-rhcos-4.10.3-x86_64-metal.x86_64.raw.gz /var/tmp/.
