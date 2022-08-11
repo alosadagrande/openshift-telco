@@ -6,12 +6,12 @@
     "units": [{
         "name": "var-mnt.mount",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Mount precached container images\nBefore=precache-images.service\nStopWhenUnneeded=true\n\n[Mount]\nWhat=/dev/disk/by-partlabel/data\nWhere=/var/mnt\nType=xfs\nTimeoutSec=30\n\n[Install]\nWantedBy=multi-user.target"
+        "contents": "[Unit]\nDescription=Mount precached container images\nBefore=precache-images.service\nStopWhenUnneeded=true\n\n[Mount]\nWhat=/dev/disk/by-partlabel/data\nWhere=/var/mnt\nType=xfs\nTimeoutSec=120\n\n[Install]\nWantedBy=multi-user.target"
     },
     {
         "name": "precache-images.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Extracts the precached images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nBefore=agent.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/usr/local/bin/ai-images\nExecStart=bash /var/mnt/ai-images/extract-ai.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=45\n\n[Install]\nWantedBy=multi-user.target default.target\nWantedBy=agent.service"
+        "contents": "[Unit]\nDescription=Extracts the precached images into containers storage\nRequires=var-mnt.mount\nAfter=var-mnt.mount\nBefore=agent.service\n\n[Service]\nType=oneshot\nUser=root\nWorkingDirectory=/var/mnt/ai-images\nExecStart=bash /usr/local/bin/extract-ai.sh\nExecStartPost=systemctl disable var-mnt.mount\nExecStop=systemctl stop var-mnt.mount\nTimeoutStopSec=180\n\n[Install]\nWantedBy=multi-user.target default.target\nWantedBy=agent.service"
      }
     ]
   },
