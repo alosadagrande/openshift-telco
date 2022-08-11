@@ -2,7 +2,7 @@
 
 PULL_SECRET_PATH="/home/kni/ipi-install-cnf20/pull-secret.json"
 FOLDER="${FOLDER:-$(pwd)}"
-OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images-4.10.3.txt}"
+OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images.txt}"
 
 rm -f $FOLDER/*.tgz
 cp $OCP_RELEASE_LIST $FOLDER/$OCP_RELEASE_LIST

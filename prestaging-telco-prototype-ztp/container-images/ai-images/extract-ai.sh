@@ -26,7 +26,7 @@ do
   echo "Copying ${uri} [${current_copy}/${total_copies}]"
   skopeo copy dir://$(pwd)/${tar} containers-storage:${uri}
   if [ $? -eq 0 ]; then rm -rf ${tar}; current_copy=$((current_copy + 1)); fi
-done < ${OCP_RELEASE_LIST}
+done < ${BINARY_FOLDER}/${OCP_RELEASE_LIST}
 
 # workaround while https://github.com/openshift/assisted-service/pull/3546
 #cp /var/mnt/modified-rhcos-4.10.3-x86_64-metal.x86_64.raw.gz /var/tmp/.
