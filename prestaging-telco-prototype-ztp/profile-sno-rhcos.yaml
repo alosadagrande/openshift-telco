@@ -31,6 +31,11 @@ snonode.virt01.eko4.cloud.lab.eng.bos.redhat.com:
 #      origin: container-images/extract-4.10.3.sh
     - path: /home/core/create-gpt-partition.sh
       origin: create-gpt-partition.sh
+    - path: /home/core/.docker/config.json
+      origin: /home/alosadag/Documents/CNF/ASSISTED/factory-boot/saas-discovery-iso/first-boot-ignition/first-boot-ignition/config.json
+#    - path: /home/core/factory-precaching-cli
+#      origin: /home/alosadag/Documents/CNF/cnf-git/telco-ran-tools/_output/factory-precaching-cli
+#      binary: true
 #  cmds:
 #    - 'systemctl enable run-media.mount'
 #    - 'systemctl enable assistedconfig.service'
