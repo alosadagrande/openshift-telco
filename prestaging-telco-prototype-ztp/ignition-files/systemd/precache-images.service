@@ -1,0 +1,21 @@
+# /etc/systemd/system/precache-images.service
+[Unit]
+Description=Extracts the TEST images into containers storage
+#BindsTo=var-mnt.mount
+After=var-mnt.mount
+#Before=machine-config-daemon-pull.service
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/var/mnt/ai-images
+ExecStart=bash /usr/local/bin/extract-ai.sh
+#ExecStop=systemctl disable var-mnt.mount
+#ExecStop=bash /usr/local/bin/echo.sh
+#ExecStop=systemctl stop var-mnt.mount
+TimeoutStopSec=30
+#RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+#WantedBy=machine-config-daemon-pull.service

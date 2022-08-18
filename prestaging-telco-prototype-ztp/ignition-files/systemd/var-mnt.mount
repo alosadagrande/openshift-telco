@@ -1,0 +1,17 @@
+# /etc/systemd/system/var-mnt.mount
+[Unit]
+Description=Mount partition with container images
+Before=precache-images.service
+BindsTo=precache-images.service
+#After=multi-user.target
+StopWhenUnneeded=true
+
+[Mount]
+What=/dev/disk/by-partlabel/data
+Where=/var/mnt
+Type=xfs
+TimeoutSec=30
+
+[Install]
+#WantedBy=multi-user.target
+RequiredBy=precache-images.service
