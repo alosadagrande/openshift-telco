@@ -3,6 +3,7 @@
 Description=Extracts the TEST images into containers storage
 #BindsTo=var-mnt.mount
 After=var-mnt.mount
+Before=agent.service
 #Before=machine-config-daemon-pull.service
 
 [Service]
@@ -17,5 +18,4 @@ TimeoutStopSec=30
 #RemainAfterExit=yes
 
 [Install]
-WantedBy=multi-user.target
-#WantedBy=machine-config-daemon-pull.service
+WantedBy=multi-user.target agent.service
