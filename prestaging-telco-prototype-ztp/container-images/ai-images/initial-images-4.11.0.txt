@@ -1,3 +1,4 @@
+quay.io/alosadag/troubleshoot:latest
 quay.io/openshift-release-dev/ocp-release:4.11.0-x86_64
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:1f76fea7b2eed12e0c7e0f0de4787663e2029232cadfed7e9bb46f9aa17a0f91
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:c32772c6199a054c863126285a8b30cdadd6b1296cff1e4f22d6d3e3f9c84a7c
@@ -13,6 +14,5 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:506acacd57b6cf51722a41278c
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:04e659c94a9d1aaa46d31f023126be5057af11c75f32922bd15c6ee53e455167
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3abe65df892d91b6f219983bd4ecc71ef24a78bbc4c779ef11c5cebf3bff6879
 quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:252813800adf8140c408e6aa0956ccac8f9a3ddd4cf743f140fcaef61b23762f
-registry.redhat.io/multicluster-engine/assisted-installer-agent-rhel8@sha256:54f7376e521a3b22ddeef63623fc7256addf62a9323fa004c7f48efa7388fe39
-registry.redhat.io/multicluster-engine/assisted-installer-rhel8@sha256:3ea0582b14e78714b229ad381911256a397e0f07a91f5102667e2ccefe7e7f7f
-quay.io/alosadag/troubleshoot:latest
+registry.redhat.io/multicluster-engine/assisted-installer-agent-rhel8@sha256:482618e19dc48990bb53f46e441ce21f574c04a6e0b9ee8fe1103284e15db994
+registry.redhat.io/multicluster-engine/assisted-installer-rhel8@sha256:e0dbc04261a5f9d946d05ea40117b6c3ab33c000ae256e062f7c3e38cdf116cc
