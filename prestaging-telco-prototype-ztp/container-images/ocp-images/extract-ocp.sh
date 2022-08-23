@@ -2,7 +2,7 @@
 
 FOLDER="${FOLDER:-$(pwd)}"
 OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-ocp-images.txt}"
-BINARY_FOLDER=/usr/local/bin
+BINARY_FOLDER=/var/mnt
 
 pushd $FOLDER
 

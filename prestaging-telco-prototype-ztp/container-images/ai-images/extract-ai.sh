@@ -1,8 +1,8 @@
 #!/bin/bash
 
 FOLDER="${FOLDER:-$(pwd)}"
-OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-initial-images.txt}"
-BINARY_FOLDER=/usr/local/bin
+OCP_RELEASE_LIST="${OCP_RELEASE_LIST:-ai-images.txt}"
+BINARY_FOLDER=/var/mnt
 
 pushd $FOLDER
 
