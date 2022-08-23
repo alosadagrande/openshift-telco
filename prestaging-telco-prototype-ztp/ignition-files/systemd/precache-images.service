@@ -9,7 +9,7 @@ Before=agent.service
 [Service]
 Type=oneshot
 User=root
-WorkingDirectory=/var/mnt/ai-images
+WorkingDirectory=/var/mnt
 ExecStart=bash /usr/local/bin/extract-ai.sh
 #ExecStop=systemctl disable var-mnt.mount
 #ExecStop=bash /usr/local/bin/echo.sh
