@@ -1,0 +1,3 @@
+registry.redhat.io/multicluster-engine/assisted-installer-agent-rhel8@sha256:c183ce823145d5b72b196ec982a057d0378384cc929a3aa1989b7b745ab0e4fb
+registry.redhat.io/multicluster-engine/assisted-installer-reporter-rhel8@sha256:4418ccebaca3f58899b5968e6905910b8e38f70f7d31a6103f95a67334710b13
+registry.redhat.io/multicluster-engine/assisted-installer-rhel8@sha256:1da0c708862fba64e94474f17a31e88ba3a0f48f6b9d181c2efbec32c2d84b7b
