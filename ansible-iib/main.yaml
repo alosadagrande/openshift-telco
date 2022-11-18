@@ -1,0 +1,12 @@
+- hosts: localhost
+  connection: local
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: Include vars
+    include_vars: ./defaults/main.yaml
+  - name: Add bundle to index images
+    include_tasks: ./tasks/add_bundle.yaml
+    loop: "{{ iib_operator_list }}"
+    loop_control:
+      extended: yes

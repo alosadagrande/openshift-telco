@@ -1,0 +1,58 @@
+iib_operator_list: ["ptp-operator", "sriov-network-operator", "local-storage-operator", "cluster-logging", "bare-metal-event-relay"]
+iib_ocp_version: '4.12'
+iib_catsrc_image_name: 'redhat-operator-index'
+iib_registry_hostname: 'quay.io'
+iib_registry_port: '443'
+iib_registry_namespace: 'alosadag'
+iib_operator_spec:
+  performance-addon-operator:
+    package_name: 'performance-addon-operator-bundle-registry-container'
+    version_matrix:
+      '4.8': '4.8'
+      '4.9': '4.9'
+      '4.10': '4.10'
+  ptp-operator:
+    package_name: 'ose-ptp-operator-metadata-container'
+    version_matrix:
+      '4.8': '4.8'
+      '4.9': '4.9'
+      '4.10': '4.10'
+      '4.11': '4.11'
+      '4.12': '4.12'
+  sriov-network-operator:
+    package_name: 'sriov-network-operator-metadata-container'
+    version_matrix:
+      '4.8': '4.8'
+      '4.9': '4.9'
+      '4.10': '4.10'
+      '4.11': '4.11'
+      '4.12': '4.12'
+  local-storage-operator:
+    package_name: 'local-storage-operator-metadata-container'
+    version_matrix:
+      '4.8': '4.8'
+      '4.9': '4.9'
+      '4.10': '4.10'
+      '4.11': '4.11'
+      '4.12': '4.12'
+  cluster-logging:
+    package_name: 'cluster-logging-operator-metadata-container'
+    version_matrix:
+      '4.8': '5.1'
+      '4.9': '5.3'
+      '4.10': '5.3'
+      '4.11': '5.4.2-14'
+      '4.12': '5.5'
+  bare-metal-event-relay:
+    package_name: 'bare-metal-event-relay-operator-bundle-container'
+    version_matrix:
+      '4.8': '4.10'
+      '4.9': '4.10'
+      '4.10': '4.10'
+      '4.11': '4.11'
+      '4.12': '4.12'
+  odf-lvm-operator:
+    package_name: 'odf-lvm-operator-bundle-container'
+    version_matrix:
+      '4.11': '4.11'
+      '4.12': '4.12'
