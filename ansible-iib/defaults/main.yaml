@@ -1,4 +1,4 @@
-iib_operator_list: ["ptp-operator", "sriov-network-operator", "local-storage-operator", "cluster-logging", "bare-metal-event-relay"]
+iib_operator_list: ["ptp-operator", "sriov-network-operator", "local-storage-operator", "cluster-logging", "bare-metal-event-relay", "odf-lvm-operator", "metallb-operator"]
 iib_ocp_version: '4.12'
 iib_catsrc_image_name: 'redhat-operator-index'
 iib_registry_hostname: 'quay.io'
@@ -56,3 +56,9 @@ iib_operator_spec:
     version_matrix:
       '4.11': '4.11'
       '4.12': '4.12'
+  metallb-operator:
+    package_name: 'ose-metallb-operator-bundle-container'
+    version_matrix:
+      '4.11': '4.11'
+      '4.12': '4.12'
+
