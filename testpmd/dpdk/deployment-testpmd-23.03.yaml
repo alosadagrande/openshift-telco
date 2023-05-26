@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: testpmd
+    app.kubernetes.io/component: testpmd
+    app.kubernetes.io/instance: testpmd
+  name: testpmd
+  namespace: testpmd
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: testpmd
+  template:
+    metadata:
+      labels:
+        app: testpmd
+      annotations:
+        k8s.v1.cni.cncf.io/networks: openshift-sriov-network-operator/sriov-nw-du-vfio-ens4f0,openshift-sriov-network-operator/sriov-nw-du-vfio-ens4f1
+        irq-load-balancing.crio.io: "disable"
+        cpu-load-balancing.crio.io: "disable"
+    spec:
+      runtimeClassName: "performance-openshift-node-performance-profile"
+      serviceAccount: deployer
+      serviceAccountName: deployer
+      securityContext:
+        runAsUser: 0
+      containers:
+        - image: quay.io/alosadag/dpdk-testpmd:vrhel-23.03
+          command:
+          - /bin/bash
+          - -c
+          - sleep INF
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add: ["IPC_LOCK","SYS_RESOURCE","NET_RAW"]
+          imagePullPolicy: Always
+          env:
+            - name: RUN_TYPE
+              value: "testpmd"
+          name: testpmd
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          resources:
+            limits:
+              cpu: "16"
+              hugepages-1Gi: 8Gi
+              memory: 2Gi
+              openshift.io/xxv710_ens4f0: "1"
+              openshift.io/xxv710_ens4f1: "1"
+            requests:
+              cpu: "16"
+              hugepages-1Gi: 8Gi
+              memory: 2Gi
+              openshift.io/xxv710_ens4f0: "1"
+              openshift.io/xxv710_ens4f1: "1"
+          volumeMounts:
+            - mountPath: /mnt/huge
+              name: hugepage
+      dnsPolicy: ClusterFirst
+      volumes:
+      - name: hugepage
+        emptyDir:
+          medium: HugePages
+      restartPolicy: Always
