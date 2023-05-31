@@ -12,9 +12,9 @@ if [ "${DPDK_VERSION}" == "${LATEST_DPDK_VERSION}" ]; then
   TAG="latest"
 fi
 
-podman build -f Dockerfile-ubi9 --no-cache . \
+podman build -f Dockerfile-ubi9-crypto --no-cache . \
   --build-arg DPDK_VERSION=${DPDK_VERSION} \
   --authfile=${PULL_SECRET} \
   -t ${REGISTRY}/${DPDK_IMAGE}:${TAG}
 
-podman push --authfile=${PULL_SECRET} ${REGISTRY}/${DPDK_IMAGE}:ubi9-${TAG}
+podman push --authfile=${PULL_SECRET} ${REGISTRY}/${DPDK_IMAGE}:ubi9-${TAG}-crypto

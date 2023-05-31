@@ -17,4 +17,4 @@ podman build -f Dockerfile --no-cache . \
   --authfile=${PULL_SECRET} \
   -t ${REGISTRY}/${DPDK_IMAGE}:${TAG}
 
-podman push --authfile=${PULL_SECRET} ${REGISTRY}/${DPDK_IMAGE}:${TAG}
+podman push --authfile=${PULL_SECRET} ${REGISTRY}/${DPDK_IMAGE}:centos9-${TAG}
