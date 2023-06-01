@@ -48,7 +48,7 @@ RUN pip3 install meson ninja pyelftools
 RUN cd /usr/src/ && wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.gz && tar zxvf nasm-2.16.01.tar.gz && rm -f nasm-2.16.01.tar.gz && \
     cd nasm-2.16.01 && \
     ./configure && make && make install && \
-    cp nasm /usr/bin/nasm
+    cp nasm /usr/bin/nasm 
 
 # AES-NI Multi Buffer Crypto Poll Mode Driver
 RUN cd /usr/src/ && wget https://github.com/01org/intel-ipsec-mb/archive/v1.3.zip && unzip v1.3.zip && rm -f v1.3.zip && \
@@ -61,7 +61,8 @@ RUN dnf install openssl openssl-devel openssl-libs -y
 # DPDK
 RUN cd /usr/src/ && wget http://fast.dpdk.org/rel/dpdk-${DPDK_VER}.tar.xz && \
     tar -xpvf dpdk-${DPDK_VER}.tar.xz && rm -f dpdk-${DPDK_VER}.tar.xz && \
-    cd dpdk-${DPDK_VER} && \
+    ls -l /usr/src && \
+    cd dpdk-stable-${DPDK_VER} || cd dpdk-${DPDK_VER} && \ 
     meson setup build && \
     cd build  && \
     meson configure -Denable_docs=false && \
