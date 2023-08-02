@@ -1,3 +1,7 @@
+# Files
 *.tgz
 *.gz
 *.iso
+
+# Folders
+.idea/
