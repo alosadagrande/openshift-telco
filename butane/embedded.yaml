@@ -1,0 +1,15 @@
+variant: rhcos
+version: 0.1.0
+passwd:
+  users:
+    - name: root
+      ssh_authorized_keys:
+        - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZnG8AIzlDAhpyENpK2qKiTT8EbRWOrz7NXjRzopbPu215mocaJgjjwJjh1cYhgPhpAp6M/ttTk7I4OI7g4588Apx4bwJep6oWTU35LkY8ZxkGVPAJL8kVlTdKQviDv3XX12l4QfnDom4tm4gVbRH0gNT1wzhnLP+LKYm2Ohr9D7p9NBnAdro6k++XWgkDeijLRUTwdEyWunIdW1f8G0Mg8Y1Xzr13BUo3+8aey7HLKJMDtobkz/C8ESYA/f7HJc5FxF0XbapWWovSSDJrr9OmlL9f4TfE+cQk3s+eoKiz2bgNPRgEEwihVbGsCN4grA+RzLCAOpec+2dTJrQvFqsD alosadag@sonnelicht.local'
+      password_hash: '$2b$05$aAd9TkvWnvUmeDQEA9vkiOoCqCZgd6cWn0xXwe.ii/TqeCxUC0Z0G'
+storage:
+  files:
+    - path: /etc/ssh/sshd_config
+      contents:
+        local: ./live-sshd_config
+      mode: 0600
+      overwrite: true
