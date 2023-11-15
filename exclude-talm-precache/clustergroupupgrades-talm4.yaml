@@ -1,0 +1,20 @@
+apiVersion: ran.openshift.io/v1alpha1
+kind: ClusterGroupUpgrade
+metadata:
+  name: v4141
+  namespace: ztp-sno-worker-02-policies
+spec:
+  preCaching: true 
+  preCachingConfigRef:
+    name: kcs
+    namespace: ztp-sno-worker-02-policies
+  backup: false
+  deleteObjectsOnCompletion: false
+  clusters:
+  - sno-worker-02
+  enable: true
+  managedPolicies:
+  - platform-upgrade-v414-1
+  remediationStrategy:
+    maxConcurrency: 1 
+    timeout: 240
