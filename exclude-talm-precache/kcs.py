@@ -37,9 +37,8 @@ def compute_overhead(payload_in_cluster, payload_full_release, verbose=False):
         for image_ in payload_full_release:
             if cluster_image['digest'] == image_['digest']:
                 payload_full_release.remove(image_)
-
+    print(f"    Number of release images NOT USED in this cluster:", len(payload_full_release))
     if verbose:
-        print(f"    Number of release images NOT USED in this cluster:", len(payload_full_release))
         for entry in payload_full_release:
             print(entry)
 
