@@ -101,8 +101,6 @@ def target_exclude_precache(current_images_not_used,target_payload_full_release,
 
 
 #main
-#OCP_RELEASE='4.13.19'
-#TARGET_OCP_RELEASE='4.14.1'
 
 # diff between what is running and the current release payload
 with open('./assets/release_payload.json') as user_file:
