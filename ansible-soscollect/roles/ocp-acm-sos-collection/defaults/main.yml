@@ -1,0 +1,21 @@
+---
+# defaults file for roles/ocp-sos-collection
+s3_endpoint_url: "http://10.19.138.94:9002"
+# Arguments to the sosreport command
+sosreport_args:
+  #- --ssh-user=core
+  #- --ssh-key="{{ core_ssh_key }}"
+  - --cluster-type=ocp
+  - --cluster-option ocp.token="{{ managed_serviceaccount.token }}",ocp.api-url="{{ cluster_proxy.cluster_url }}"
+  #- --cluster-option ocp.kubeconfig=/root/.kube/config
+  - --alloptions
+  - --all-logs
+  - --verify
+  #- --nopasswd-sudo
+  - --no-local
+  - --batch
+  - --plugin-option=crio.all=on 
+  - --plugin-option=crio.logs=on 
+  - --plugin-option=podman.all=on 
+  - --plugin-option=podman.logs=on
+  - --timeout=1800

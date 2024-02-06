@@ -1,0 +1,26 @@
+FROM registry.redhat.io/rhel8/support-tools
+
+RUN dnf update -y
+
+RUN dnf install -y ansible-core ansible-collection-redhat-rhel_mgmt.noarch python3.11-pip sudo
+
+RUN ansible-galaxy collection install amazon.aws -p /usr/share/ansible/collections && \
+    ansible-galaxy collection install stolostron.core -p /usr/share/ansible/collections && \
+    ansible-galaxy collection install kubernetes.core -p /usr/share/ansible/collections
+
+RUN pip-3.11 install boto3 &&  \
+    pip-3.11 install botocore && \
+    pip-3.11 install ansible-runner && \
+    pip-3.11 install openshift && \
+    pip-3.11 install jinja2 
+
+RUN curl -O https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest-4.14/openshift-client-linux-4.14.10.tar.gz &&  \
+    tar zxvf openshift-client-linux-4.14.10.tar.gz && \
+    chmod u+x oc && mv oc /usr/bin/oc
+
+RUN mkdir -p /runner/inventory && chmod 777 -R /runner && \
+    mkdir -p /.ansible/tmp && chmod 777 -R /.ansible && \
+    mkdir -p /.kube && chmod 777 -R /.kube
+
+COPY ocp.py /usr/lib/python3.6/site-packages/sos/collector/clusters/ocp.py
+RUN dnf clean all -y

@@ -1,0 +1,25 @@
+---
+# tasks file for roles/ocp-sos-collection
+
+- name: Display Host OS Distribution
+  debug:
+    var: ansible_facts['distribution']
+
+- name: Ensure sosreport is installed
+  yum:
+    name: sos
+    state: present
+  become: true
+  when: "'RedHat' in ansible_facts['distribution'] or 'Fedora' in ansible_facts['distribution']"
+
+- name: Create sosreport
+  command: >
+    sos-collector
+      {% for arg in sosreport_args %}
+        {{ arg }}
+      {% endfor %}
+      --nodes={{servers}}
+      {% if sosreport_case is defined %}
+        --case-id={{ sosreport_case }}
+      {% endif %}
+  when: "'RedHat' in ansible_facts['distribution'] or 'Fedora' in ansible_facts['distribution']"

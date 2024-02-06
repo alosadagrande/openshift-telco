@@ -1,0 +1,84 @@
+---
+# tasks file for roles/ocp-sos-collection
+
+#- name: Display Host OS Distribution
+#  debug:
+#    var: ansible_facts['distribution']
+#
+#- name: Ensure sosreport is installed
+#  yum:
+#    name: sos
+#    state: present
+#  become: true
+#  when: "'RedHat' in ansible_facts['distribution'] or 'Fedora' in ansible_facts['distribution']"
+
+- name: Display all variables/facts known for a host
+  ansible.builtin.debug:
+    var: hostvars
+
+- name: "Get ClusterProxy URL"
+  stolostron.core.cluster_proxy:
+    hub_kubeconfig: "{{ lookup('env', 'K8S_AUTH_KUBECONFIG') }}"
+#    managed_cluster: "{{ hostvars[inventory_hostname].groups[cluster_name] }}"
+    managed_cluster: "sno-worker-01"
+    wait: yes
+    timeout: 60
+  register: cluster_proxy
+
+- name: "Get managed ServiceAccount token for static ServiceAccount"
+  stolostron.core.managed_serviceaccount:
+    state: present
+    name: "{{ serviceaccount_name }}"
+    hub_kubeconfig: "{{ lookup('env', 'K8S_AUTH_KUBECONFIG') }}"
+    managed_cluster: "sno-worker-01"
+#    managed_cluster: "{{ hostvars[inventory_hostname].cluster_name }}"
+    wait: yes
+    timeout: 60
+  register: managed_serviceaccount
+
+- name: "execute oc login"
+  ansible.builtin.shell: "oc login --token={{ managed_serviceaccount.token }} {{ cluster_proxy.cluster_url }} --insecure-skip-tls-verify"
+
+- name: Create sosreport
+  command: >
+    sos-collector
+      {% for arg in sosreport_args %}
+        {{ arg }}
+      {% endfor %}
+      {% if sosreport_case is defined %}
+      ##  --nodes={{servers}}
+        --case-id={{ sosreport_case }}
+      {% endif %}
+#  when: "'RedHat' in ansible_facts['distribution'] or 'Fedora' in ansible_facts['distribution']"
+  register: sosreport
+
+#- name: Set fact to the file
+#  ansible.builtin.set_fact:
+#    s3_file: "{{ sosreport.stdout | regex_search(regexp,multiline=True') is not none }}"
+#  vars:
+#    regexp: "^/var/tmp/sos-collector-.*?.tar.xz$"
+
+- name: Find /var/tmp files that starts with sos-collector
+  ansible.builtin.find:
+    paths: /var/tmp/
+    patterns: 'sos-collector*.tar.xz'
+  register: list_sosreports
+  when: sosreport_case is not defined
+
+- name: Upload to Non AWS S3 Storage
+  amazon.aws.s3_object:
+    bucket: "sos-collector-bucket"
+    object: "{{ item.path }}"
+    src: "{{ item.path }}"
+    mode: put
+    aws_access_key: "{{ s3_aws_access_key }}"
+    aws_secret_key: "{{ s3_aws_secret_key }}"
+    validate_certs: false
+    encrypt: false
+    rgw: true
+    permission: []
+    endpoint_url: "{{ s3_endpoint_url }}"
+  loop: "{{ list_sosreports.files }}"
+  loop_control:
+    label: "{{ item.path }}"
+  when: sosreport_case is not defined

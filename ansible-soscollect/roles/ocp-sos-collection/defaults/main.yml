@@ -1,0 +1,18 @@
+---
+# defaults file for roles/ocp-sos-collection
+
+# Arguments to the sosreport command
+sosreport_args:
+  - --ssh-user=core
+  - --cluster-type=none
+  - --alloptions
+  - --all-logs
+  - --verify
+  - --nopasswd-sudo
+  - --no-local
+  - --batch
+  - --plugin-option=crio.all=on 
+  - --plugin-option=crio.logs=on 
+  - --plugin-option=podman.all=on 
+  - --plugin-option=podman.logs=on
+  - --timeout=1800
