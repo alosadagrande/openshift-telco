@@ -20,7 +20,7 @@
   stolostron.core.cluster_proxy:
     hub_kubeconfig: "{{ lookup('env', 'K8S_AUTH_KUBECONFIG') }}"
 #    managed_cluster: "{{ hostvars[inventory_hostname].groups[cluster_name] }}"
-    managed_cluster: "sno-worker-01"
+    managed_cluster: "sno-worker-00"
     wait: yes
     timeout: 60
   register: cluster_proxy
@@ -30,7 +30,7 @@
     state: present
     name: "{{ serviceaccount_name }}"
     hub_kubeconfig: "{{ lookup('env', 'K8S_AUTH_KUBECONFIG') }}"
-    managed_cluster: "sno-worker-01"
+    managed_cluster: "sno-worker-00"
 #    managed_cluster: "{{ hostvars[inventory_hostname].cluster_name }}"
     wait: yes
     timeout: 60
