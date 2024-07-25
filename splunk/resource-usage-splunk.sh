@@ -2,14 +2,14 @@
 
 SNO_HOSTNAME="${1:-zt-sno3}"
 NON_RESERVED_CORES="2-31,34-63"
+NUMBER_CORES=64
 
-# NODE CPU AVG
-oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=100 * avg(1 - rate(node_cpu_seconds_total{mode="idle"}[30m])) by (instance)' | jq -r '.data.result[] | [.value[0], .value[1], .metric.instance] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_avg_node_noidle_cpu_percentage.txt
+#* NODE CPU AVG
+oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=100/64 * sum(1 - rate(node_cpu_seconds_total{mode="idle"}[30m])) by (instance)' | jq -r '.data.result[] | [.value[0], .value[1], .metric.instance] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_avg_node_noidle_cpu_percentage.txt
+#oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=100/64 * max(1 - rate(node_cpu_seconds_total{mode="idle"}[30m])) by (instance)' | jq -r '.data.result[] | [.value[0], .value[1], .metric.instance] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_max_node_noidle_cpu_percentage.txt
 
-oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=100 * max(1 - rate(node_cpu_seconds_total{mode="idle"}[5m])) by (instance)' | jq -r '.data.result[] | [.value[0], .value[1], .metric.instance] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_max_node_noidle_cpu_percentage.txt
-
-# NODE MEMORY
-oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=100 * (1 - (sum(avg_over_time(node_memory_MemAvailable_bytes{job="node-exporter"}[30m]))/sum(avg_over_time(node_memory_MemTotal_bytes{job="node-exporter"}[30m]))))' | jq -r '.data.result[] | [.value[0], .value[1]] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_node_percentage_free_memory.txt
+#* NODE MEMORY
+oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=100 * (1 - (sum(avg_over_time(node_memory_MemAvailable_bytes[30m]))/sum(avg_over_time(node_memory_MemTotal_bytes[30m]))))' | jq -r '.data.result[] | [.value[0], .value[1]] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_node_percentage_free_memory.txt
 
 # CONTAINER CPU USAGE SLICES
 oc --kubeconfig=/root/${SNO_HOSTNAME}/kubeconfig rsh -n openshift-monitoring prometheus-k8s-0 curl -ks 'http://localhost:9090/api/v1/query' --data-urlencode 'query=sort_desc((rate(container_cpu_usage_seconds_total{id=~"/system.slice/.+"}[30m])))' | jq -r '.data.result[] | [.value[0], .value[1], .metric.cpu, .metric.service, .metric.id] | @tsv' | sed 's/\t/ /g' >> ${SNO_HOSTNAME}_system-slice-cpu.txt

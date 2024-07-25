@@ -1,0 +1,61 @@
+TOP USAGE BY NS
+===============
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu_pod" | stats avg(cpu_usage) as cpu_sec_usage by namespace pod | eval cpu_sec_usage=round(cpu_sec_usage,4) | stats sum(cpu_sec_usage) as cpu_sec_usage_ns by namespace | sort -cpu_sec_usage_ns | head 20
+
+NODE CPU
+========
+source="/root/git/faredge-ztp/scripts/*avg_node_noidle_cpu_percentage.txt" index="resource_usage" sourcetype="network_mbps" | eval rtx=rtx*(64/100)| timechart sum(rtx) as total_cpu_seconds
+source="/root/git/faredge-ztp/scripts/*avg_node_noidle_cpu_percentage.txt" host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="network_mbps" | timechart sum(rtx)
+
+source="/root/git/faredge-ztp/scripts/*avg_node_noidle_cpu_percentage.txt" index="resource_usage" sourcetype="network_mbps" | stats max(rtx) as max_cpu_usage_%
+
+
+SLICES
+=======
+index=resource_usage sourcetype="cpu.slices" | rex field=source "/root/git/faredge-ztp/scripts/zt-sno3_(?<source>.*)-cpu.txt" | timechart sum(cpu_usage) by source
+index=resource_usage sourcetype="cpu.slices" slice_id=*system.slice* | eval cpu_usage=cpu_usage*(100/64) | timechart sum(cpu_usage) as cpu_usage_total_%
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu.slices" slice_id=*ovs.slice* | rex "/ovs.slice/(?<slice_id>[^\s]+)" | timechart sum(cpu_usage) by slice_id
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu.slices" slice_id!=*ovs.slice* | rex "/system.slice/(?<slice_id>[^\s]+)" | eval cpu_usage=round(cpu_usage,5) | stats max(cpu_usage) as cpu_sec_usage by slice_id | sort -cpu_sec_usage | head 10
+
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu.slices" | timechart span=30m sum(cpu_usage) by slice_id
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu.slices" | timechart span=30m sum(cpu_usage) as cpu_usage_%
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu.slices" | stats max(cpu_usage) by slice_id 
+
+
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu.slices" slice_id=*ovs.slice* | rex "/ovs.slice/(?<slice_id>[^\s]+)" | timechart span=30m sum(cpu_usage)
+
+NODE_MEMORY
+============
+index="resource_usage" sourcetype="memory_node_usage" | timechart span=30m sum(memory_usage) as memory_usage_% span=30m
+
+CPU_POD
+=======
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu_pod" namespace=openshift-ptp OR namespace=openshift-sriov-network-operator | timechart span=30m sum(cpu_usage) by namespace span=30m
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu_pod" namespace=openshift-local-storage | eval cpu_usage=round(cpu_usage,5) | timechart span=30m sum(cpu_usage) as cpu_usage by namespace span=30m
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu_pod" | timechart span=30m sum(cpu_usage) as all_pods_cpu_sec span=30m
+host="jumphost.inbound.vz.bos2.lab" index="resource_usage" sourcetype="cpu_pod" | timechart span=30m sum(cpu_usage) as all_pods_cpu_sec by namespace span=30m| sort by -all_pods_cpu_sec
+
+CPU_THROTTLED
+=============
+index=* sourcetype="*" sourcetype=cpu_cfs_throttled_periods_total container!="" throttled_periods!=0
+
+
+CPU_RESERVED
+============
+index="resource_usage" sourcetype=cpu_usage_reserved | timechart span=30m sum(cpu_usage)
+index="resource_usage" sourcetype=cpu_usage_reserved mode!=idle | eval cpu_usage=cpu_usage*(100/4) |timechart span=30m sum(cpu_usage) as cpu_usage_% | stats max(cpu_usage_%) as max_cpu_usage_%
+
+
+POD MEMORY
+=========
+index=resource_usage sourcetype=memory_pod_bytes  source="*memory-rss-bytes*" | timechart  span=30m sum(memory_bytes) by pod span=30m
+index=resource_usage sourcetype=memory_pod_bytes    source="*memory-working-set-bytes*" | timechart  span=30m sum(memory_bytes) by pod span=30m
+index=resource_usage sourcetype=memory_pod_bytes source=*rss* pod!="" | eval memory_bytes=(memory_bytes/(1024*1024*1024)) |rex field=source "/root/git/faredge-ztp/scripts/zt-sno3_(?<source>.*).txt"  |  timechart sum(memory_bytes) by pod
+
+NODE NETWORKING
+==========
+index="resource_usage" sourcetype=network_mbps source=*node-network* source=*transmit* | timechart span=30m sum(rtx) as transmit
+
+CONTAINER NETWORKING
+====================
+index=resource_usage sourcetype=network_container_bytes source=*receive* | rex field=source "/root/git/faredge-ztp/scripts/zt-sno3_(?<source>.*)-bytes.total.txt" | eval tx_bytes=tx_bytes*((8/(1024*1024))) | rex field=namespace "openshift-(?<namespace>.*)" | timechart span=30m sum(tx_bytes) as sum_tx_bytes by namespace
