@@ -1,0 +1,39 @@
+apiVersion: oran.openshift.io/v1alpha1
+kind: ORANO2IMS
+metadata:
+  annotations:
+  labels:
+    app.kubernetes.io/created-by: oran-o2ims
+    app.kubernetes.io/instance: orano2ims-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: orano2ims
+    app.kubernetes.io/part-of: oran-o2ims
+  name: sample
+  namespace: oran-o2ims
+spec:
+  alarmSubscriptionServerConfig:
+    enabled: false
+  cloudId: c0332915-6bff-4d8d-8628-0ab3cc2c7e5e
+  deploymentManagerServerConfig:
+    backendToken: $BACKEND_TOKEN 
+    backendType: regular-hub
+    enabled: true
+    extensions:
+      - '{"hardware": {cpu: .status.capacity.cpu, memory: .status.capacity.memory, k8s_version: .status.version.kubernetes}}'
+      - '{"claims": {cluster_product: .status.clusterClaims[]|select(.name =="product.open-cluster-management.io").value,
+      cluster_version: .status.clusterClaims[]| select(.name == "version.openshift.io").value,
+      cluster_topology: .status.clusterClaims[]|select(.name =="controlplanetopology.openshift.io").value}}'
+      - |
+          .metadata.labels["name"] as $name |
+          {
+            name: $name,
+            alias: $name
+          }
+  image: quay.io/imihai/oran-o2ims:4.16.0
+  ingressHost: oran-o2ims.apps.hub0.inbound-int.se-lab.eng.rdu2.dc.redhat.com
+  metadataServerConfig:
+    enabled: true
+  resourceServerConfig:
+    backendToken: $BACKEND_TOKEN_RS 
+    backendURL: https://search-api-open-cluster-management.apps.hub0.inbound-int.se-lab.eng.rdu2.dc.redhat.com
+    enabled: true
