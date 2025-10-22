@@ -18,5 +18,4 @@ USER 0
 RUN dnf install jq -y && \
     dnf clean all  && rm -rf /var/cache/dnf 
 
-
 ENTRYPOINT ["/bin/bash", "/usr/bin/init.sh"]

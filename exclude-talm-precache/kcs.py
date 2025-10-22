@@ -1,11 +1,18 @@
 import yaml
 import json
 import sys
+import os
 from kubernetes import client, config
 from openshift.dynamic import DynamicClient
 
 OCP_RELEASE=sys.argv[1]
 TARGET_OCP_RELEASE=sys.argv[2]
+
+# Check for verbose flag
+VERBOSE = False
+if os.getenv('VERBOSE_FLAG'):
+    VERBOSE = True
+
 k8s_client = config.new_client_from_config()
 dyn_client = DynamicClient(k8s_client)
 
@@ -98,6 +105,28 @@ def target_exclude_precache(current_images_not_used,target_payload_full_release,
 
     return target_payload_no_precache
 
+def get_images_to_precache(target_payload_full_release, excluded_images, verbose=False):
+    """
+    Returns images that need to be precached (all target images minus excluded ones)
+    """
+    images_to_precache = []
+    excluded_names = [image["name"] for image in excluded_images]
+    
+    print(f"    Total number of release images for the {TARGET_OCP_RELEASE} version:", len(target_payload_full_release))
+    
+    for target_image in target_payload_full_release:
+        if target_image['name'] not in excluded_names:
+            images_to_precache.append(target_image)
+    
+    print(f"    Number of images that NEED to be precached:", len(images_to_precache))
+    
+    if verbose:
+        print(f"    List of images that NEED to be precached (ready for podman pull):")
+        for image in images_to_precache:
+            print(f"- name: {image['digest']}")    
+            
+    return images_to_precache
+
 
 
 #main
@@ -112,13 +141,17 @@ with open('./assets/target_release_payload.json') as user_file:
 parsed_target_payload_full_release=json.loads(target_payload_full_release)
 
 print("New images in the payload for the target release")
-new_payload_images=compute_new_images(parsed_target_payload_full_release,parsed_payload_full_release,verbose=True)
+new_payload_images=compute_new_images(parsed_target_payload_full_release,parsed_payload_full_release,verbose=VERBOSE)
 
-print("Images running in the cluster")
+# print("Images running in the cluster")
 payload_in_cluster=get_payload_in_use()
 
 print("Images in the payload but not running in the cluster")
-images_not_in_use=compute_overhead(payload_in_cluster,parsed_payload_full_release,verbose=False)
+images_not_in_use=compute_overhead(payload_in_cluster,parsed_payload_full_release,verbose=VERBOSE)
 
-target_exclude_precache(images_not_in_use,parsed_target_payload_full_release,verbose=True)
+print("Images that DO NOT need to be precached")
+excluded_images=target_exclude_precache(images_not_in_use,parsed_target_payload_full_release,verbose=VERBOSE)
+
+print("Images that NEED to be precached")
+images_to_precache=get_images_to_precache(parsed_target_payload_full_release, excluded_images, verbose=VERBOSE)
 
